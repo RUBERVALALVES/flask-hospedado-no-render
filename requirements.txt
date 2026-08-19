@@ -1,4 +1,4 @@
+tensorflow
 Flask
 Gunicorn
 numpy
-tensorflow==2.12.0
