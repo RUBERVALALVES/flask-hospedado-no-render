@@ -2,7 +2,6 @@ Flask
 Gunicorn
 numpy
 os
-from flask import Flask, request, jsonify
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
