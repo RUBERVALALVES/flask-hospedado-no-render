@@ -6,6 +6,7 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 
 #comando para executar no terminal para testar servidor
+
 #curl -X POST -F "file=@ncd69.JPG" http://localhost:5000/predict
 
 app = Flask(__name__)
