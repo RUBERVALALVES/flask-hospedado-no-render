@@ -12,7 +12,7 @@ from tensorflow.keras.preprocessing import image
 app = Flask(__name__)
 
 # Carrega o modelo salvo previamente (ex: formato .keras ou .h5)
-MODEL_PATH = 'modelo_frango.keras'
+MODEL_PATH = 'modelo_frango.h5'
 
 model = load_model(MODEL_PATH)
 
