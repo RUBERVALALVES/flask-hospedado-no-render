@@ -12,6 +12,7 @@ app = Flask(__name__)
 
 # Carrega o modelo salvo previamente (ex: formato .keras ou .h5)
 MODEL_PATH = '/SUPERFRANGO/modelo_frango.keras'
+
 model = load_model(MODEL_PATH)
 
 # Defina a lista de classes na mesma ordem em que o modelo foi treinado
