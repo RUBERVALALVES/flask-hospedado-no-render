@@ -1,6 +1,6 @@
 from PIL import Image
 import os
-import io
+from io import BytesIO
 import numpy as np
 from flask import Flask, request, jsonify, render_template
 import tensorflow as tf
