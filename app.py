@@ -1,3 +1,4 @@
+from PIL import Image
 import os
 import numpy as np
 from flask import Flask, request, jsonify, render_template
@@ -69,7 +70,7 @@ def predict():
             temp_path, target_size=(180,180)
         )
 
-        img = image.open(io.BytesIO(file.read())).convert("RGB")
+        img = Image.open(io.BytesIO(file.read())).convert("RGB")
         img = img.resize((180, 180)) 
         
         img_array = tf.keras.utils.img_to_array(img)
