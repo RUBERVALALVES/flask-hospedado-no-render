@@ -3,4 +3,3 @@ tensorflow
 Gunicorn
 numpy
 pillow
-io
