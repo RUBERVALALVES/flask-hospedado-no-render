@@ -67,8 +67,8 @@ def predict():
     
     try:
 
- #       img = tf.keras.utils.load_img(
-  #          temp_path, target_size=(180,180)
+        img2 = tf.keras.utils.load_img(
+           temp_path, target_size=(180,180)
         )
 
         img = Image.open(io.BytesIO(file.read())).convert("RGB")
