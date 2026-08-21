@@ -1,6 +1,6 @@
+import io
 from PIL import Image
 import os
-from io import BytesIO
 import numpy as np
 from flask import Flask, request, jsonify, render_template
 import tensorflow as tf
@@ -64,7 +64,7 @@ def predict():
     # Salva temporariamente a imagem recebida
     temp_path = './temp_image.jpg'
     file.save(temp_path)
-
+    
     try:
 
         img = tf.keras.utils.load_img(
