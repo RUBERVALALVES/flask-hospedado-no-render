@@ -1,6 +1,6 @@
 import os
 import numpy as np
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
@@ -45,6 +45,10 @@ def prepare_image(img_path):
  #   x = x / 255.0
     return x
 
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/predict', methods=['POST'])
 def predict():
