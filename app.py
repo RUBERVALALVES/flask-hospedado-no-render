@@ -1,5 +1,3 @@
-import io
-from PIL import Image
 import os
 import numpy as np
 from flask import Flask, request, jsonify, render_template
@@ -8,18 +6,14 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 
 #comando para executar no terminal para testar servidor
-
 #curl -X POST -F "file=@ncd69.JPG" http://localhost:5000/predict
+#21/08/26 - COLOCADO COMO COPIA funcionando.seg
 
 app = Flask(__name__)
 
 # Carrega o modelo salvo previamente (ex: formato .keras ou .h5)
-#MODEL_PATH = 'modelo_frango.h5'
-
-#model = load_model(MODEL_PATH)
-
-model = tf.keras.models.load_model('modelo_frango.h5')
-
+MODEL_PATH = '/SUPERFRANGO/modelo_frango.keras'
+model = load_model(MODEL_PATH)
 
 # Defina a lista de classes na mesma ordem em que o modelo foi treinado
 CLASS_NAMES = ['Coccidiosis', 'Newcastle', 'Sadia', 'Salmonella']
@@ -35,16 +29,14 @@ def prepare_image(img_path):
     img = image.load_img(img_path, target_size=(IMG_HEIGHT, IMG_WIDTH))
     # Converte para array numpy
 
-  #  x = tf.keras.utils.img_to_array(img)
-  #  x = np.expand_dims(x, axis=0)
-
     x = image.img_to_array(img)
 
     # Adiciona a dimensão do lote (batch), transformando em (1, altura, largura, canais)
     x = np.expand_dims(x, axis=0)
 
     # Se o seu modelo foi treinado com normalização (ex: dividido por 255.0), aplique aqui:
- #   x = x / 255.0
+    # x = x / 255.0
+
     return x
 
 
@@ -64,19 +56,13 @@ def predict():
     # Salva temporariamente a imagem recebida
     temp_path = './temp_image.jpg'
     file.save(temp_path)
-    
+
     try:
 
-        img2 = tf.keras.utils.load_img(
-           temp_path, target_size=(180,180)
+        img = tf.keras.utils.load_img(
+            temp_path, target_size=(180,180)
         )
 
- 
-        img_bytes = file.read()
-        
-        img = Image.open(io.BytesIO(img_bytes)).resize((180,180))
-        
-        
         img_array = tf.keras.utils.img_to_array(img)
         img_array = tf.expand_dims(img_array, 0)  # Create a batch
 
@@ -87,10 +73,6 @@ def predict():
 
           format(100 * np.max(score))
         )
-
-
-
-
 
 
         # Prepara a imagem e roda a predição
@@ -123,4 +105,4 @@ def predict():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=10000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
