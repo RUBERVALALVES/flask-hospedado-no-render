@@ -57,7 +57,7 @@ def predict():
     if 'file' not in request.files:
         return jsonify({'error': 'Nenhum arquivo enviado'}), 400
 
-    file = request.files['file']
+    file = request.files['foto']
     if file.filename == '':
         return jsonify({'error': 'Arquivo inválido'}), 400
 
