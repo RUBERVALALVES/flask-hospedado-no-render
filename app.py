@@ -54,7 +54,7 @@ def index():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    if 'file' not in request.files:
+    if 'foto' not in request.files:
         return jsonify({'error': 'Nenhum arquivo enviado'}), 400
 
     file = request.files['foto']
