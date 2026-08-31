@@ -13,14 +13,6 @@ from tensorflow.keras.preprocessing import image
 
 app = Flask(__name__)
 
-if __name__ == "__main__":
-    # O Render injeta a porta correta aqui
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
-
-
-
-
 
 # Carrega o modelo salvo previamente (ex: formato .keras ou .h5)
 #MODEL_PATH = 'modelo_frango.h5'
@@ -130,5 +122,8 @@ def predict():
            os.remove(temp_path)
 
 
-#if __name__ == '__main__':
- #   app.run(host='0.0.0.0', port=10000, debug=True)
+if __name__ == "__main__":
+    # O Render define a variável PORT automaticamente. Se não existir, usa a 5000 localmente.
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
+
