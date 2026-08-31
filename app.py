@@ -75,7 +75,7 @@ def predict():
         img_bytes = file.read()
         
         img = Image.open(io.BytesIO(img_bytes)).resize((180,180))
-        
+        img.verify()
         
         img_array = tf.keras.utils.img_to_array(img)
         img_array = tf.expand_dims(img_array, 0)  # Create a batch
