@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 if __name__ == "__main__":
     # O Render injeta a porta correta aqui
-    port = int(os.environ.get("PORT", 10000))
+    port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
 
 
@@ -130,5 +130,5 @@ def predict():
            os.remove(temp_path)
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=10000, debug=True)
+#if __name__ == '__main__':
+ #   app.run(host='0.0.0.0', port=10000, debug=True)
