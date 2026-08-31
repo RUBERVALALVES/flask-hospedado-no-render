@@ -1,6 +1,6 @@
 import io
 from PIL import Image
-import os
+import os 
 import numpy as np
 from flask import Flask, request, jsonify, render_template
 import tensorflow as tf
@@ -12,6 +12,15 @@ from tensorflow.keras.preprocessing import image
 #curl -X POST -F "file=@ncd69.JPG" http://localhost:5000/predict
 
 app = Flask(__name__)
+
+if __name__ == "__main__":
+    # O Render injeta a porta correta aqui
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
+
+
+
+
 
 # Carrega o modelo salvo previamente (ex: formato .keras ou .h5)
 #MODEL_PATH = 'modelo_frango.h5'
