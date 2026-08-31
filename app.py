@@ -72,7 +72,7 @@ def predict():
         )
 
  
-   #     img_bytes = file.read()
+        img_bytes = file.read()
         img = Image.open(io.BytesIO(img_bytes)).resize((180,180))
     #    img.verify()
         
