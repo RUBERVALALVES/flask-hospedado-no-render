@@ -48,8 +48,7 @@ def prepare_image(img_path):
  #   x = x / 255.0
     return x
 
-
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('index.html')
 
@@ -68,9 +67,9 @@ def predict():
     file.seek(0) 
     try:
 
-  #      img2 = tf.keras.utils.load_img(
-   #        temp_path, target_size=(180,180)
-   #     )
+       img2 = tf.keras.utils.load_img(
+          temp_path, target_size=(180,180)
+       )
 
          img_bytes = file.read()
      #   img = Image.open(io.BytesIO(img_bytes)).resize((180,180))
