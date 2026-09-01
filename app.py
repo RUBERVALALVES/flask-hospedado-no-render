@@ -42,9 +42,9 @@ def predict_image(img_path):
     score = tf.nn.softmax(predictions[0])
 
 
-#@app.route('/')
-#def index():
- #   return render_template('index.html')
+@app.route('/')
+def index():
+    return render_template('index.html')
 
     
     # Formata os resultados para envio fácil para o HTML
