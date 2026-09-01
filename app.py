@@ -73,7 +73,8 @@ def predict():
    #     )
 
          img_bytes = file.read()
-        img = Image.open(io.BytesIO(img_bytes)).resize((180,180))
+     #   img = Image.open(io.BytesIO(img_bytes)).resize((180,180))
+        img = Image.open(io.BytesIO(img_bytes))
     #    img.verify()
         
         img_array = tf.keras.utils.img_to_array(img)
@@ -93,7 +94,7 @@ def predict():
 
         # Prepara a imagem e roda a predição
         processed_image = prepare_image(img)
-      #  processed_image = prepare_image(temp_path)
+      #  processed_image = prepare_image(temp_path)  aqui
         predictions = model.predict(processed_image)
 
         # Interpretando a classe vencedora
