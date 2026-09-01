@@ -30,7 +30,7 @@ def prepare_image(img_path):
     img = image.load_img(img_path, target_size=(IMG_HEIGHT, IMG_WIDTH))
     # Converte para array numpy
 
-     x = Image.img_to_array(img)
+     x = image.img_to_array(img)
 
     # Adiciona a dimensão do lote (batch), transformando em (1, altura, largura, canais)
     x = np.expand_dims(x, axis=0)
@@ -39,8 +39,7 @@ def prepare_image(img_path):
  #   x = x / 255.0
     return x
 
-
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('index.html')
 
