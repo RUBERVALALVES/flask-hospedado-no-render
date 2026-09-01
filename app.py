@@ -68,9 +68,9 @@ def predict():
         return jsonify({'error': 'Arquivo inválido'}), 400
 
    # Cria nome único para evitar conflitos em requisições concorrentes
-    #temp_filename = f"temp_{uuid.uuid4().hex}.jpg"
-    #temp_path = os.path.join('.', temp_filename)
-    #file.save(temp_path)
+    temp_filename = f"temp_{uuid.uuid4().hex}.jpg"
+    temp_path = os.path.join('.', temp_filename)
+    file.save(temp_path)
 
     img_bytes = file.read()
     image = Image.open(io.BytesIO(img_bytes)).convert('RGB')
