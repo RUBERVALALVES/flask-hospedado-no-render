@@ -14,12 +14,7 @@ from tensorflow.keras.preprocessing import image
 app = Flask(__name__)
 
 # Carrega o modelo salvo previamente (ex: formato .keras ou .h5)
-#MODEL_PATH = 'modelo_frango.h5'
-
-#model = load_model(MODEL_PATH)
-
 model = tf.keras.models.load_model('modelo_frango.h5')
-
 
 # Defina a lista de classes na mesma ordem em que o modelo foi treinado
 CLASS_NAMES = ['Coccidiosis', 'Newcastle', 'Sadia', 'Salmonella']
@@ -35,10 +30,7 @@ def prepare_image(img_path):
     img = image.load_img(img_path, target_size=(IMG_HEIGHT, IMG_WIDTH))
     # Converte para array numpy
 
-  #  x = tf.keras.utils.img_to_array(img)
-  #  x = np.expand_dims(x, axis=0)
-
-    x = image.img_to_array(img)
+     x = image.img_to_array(img)
 
     # Adiciona a dimensão do lote (batch), transformando em (1, altura, largura, canais)
     x = np.expand_dims(x, axis=0)
@@ -57,7 +49,7 @@ def predict():
     if 'file' not in request.files:
         return jsonify({'error': 'Nenhum arquivo enviado'}), 400
 
-    file = request.files['file']
+    file = request.files['foto']
     if file.filename == '':
         return jsonify({'error': 'Arquivo inválido'}), 400
 
