@@ -1,14 +1,66 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Teste de Modelo TensorFlow</title>
+    <title>Predição com Flask e TensorFlow</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 500px; margin: auto; }
+        .result { margin-top: 20px; font-weight: bold; }
+    </style>
 </head>
 <body>
-    <h1>Envie uma imagem para teste</h1>
-    <form action="/predict" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" accept="image/*" required>
-        <button type="submit">Enviar e Prever</button>
+
+<div class="container">
+    <h2>Upload de Imagem para Predição</h2>
+    
+    <form id="uploadForm">
+        <input type="file" id="imageInput" accept="image/*" required>
+        <br><br>
+        <button type="submit">Enviar e Analisar</button>
     </form>
+
+    <div class="result" id="resultDiv"></div>
+</div>
+
+<script>
+document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const fileInput = document.getElementById('imageInput');
+    const resultDiv = document.getElementById('resultDiv');
+
+    if (fileInput.files.length === 0) {
+        alert('Selecione uma imagem!');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+
+    resultDiv.innerHTML = "Processando...";
+
+    try {
+        const response = await fetch('/predict', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            resultDiv.innerHTML = `
+                <p>Classe Predita: <strong>${data.prediction}</strong></p>
+                <p>Confiança: <strong>${(data.confidence * 100).toFixed(2)}%</strong></p>
+            `;
+        } else {
+            resultDiv.innerHTML = `<span style="color:red;">Erro: ${data.error}</span>`;
+        }
+    } catch (error) {
+        resultDiv.innerHTML = `<span style="color:red;">Erro de conexão: ${error.message}</span>`;
+    }
+});
+</script>
+
 </body>
 </html>
