@@ -63,7 +63,7 @@ def predict():
     if 'file' not in request.files:
         return jsonify({'error': 'Nenhum arquivo enviado'}), 400
 
-       imagem = request.files.get('file')
+       imagem = request.files.get('imagem')
     
     if imagem:
         # Agora você pode ler os dados binários da imagem
