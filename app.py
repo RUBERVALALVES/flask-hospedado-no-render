@@ -61,8 +61,9 @@ def predict():
         return jsonify({
             'success': True,
             'prediction': predicted_class,
-            'confidence': confidence
+            'confidence': confidencet
         })
+        tf.Keras.clear_session()
     except Exception as e:
         return jsonify({'error': str(e)}), 500
         
