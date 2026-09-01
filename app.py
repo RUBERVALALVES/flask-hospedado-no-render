@@ -1,84 +1,116 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for
+# Desativa logs excessivos do TensorFlow
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
+# Força o TensorFlow a rodar estritamente usando apenas a CPU
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+import numpy as np
+from flask import Flask, request, jsonify, render_template
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
-import numpy as np
+tf.config.threading.set_intra_op_parallelism_threads(1)
+tf.config.threading.set_inter_op_parallelism_threads(1)
+
+
+#comando para executar no terminal para testar servidor
+#curl -X POST -F "file=@ncd69.JPG" http://localhost:5000/predict
+#21/08/26 - COLOCADO COMO COPIA funcionando.seg
 
 app = Flask(__name__)
 
-# Configura a pasta onde as imagens enviadas serão salvas temporariamente
-UPLOAD_FOLDER = 'static/uploads/'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-# Garante que a pasta de uploads exista
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-# Carrega o modelo pré-treinado MobileNetV2 do TensorFlow
-# Ele é capaz de reconhecer 1.000 categorias de objetos diferentes
-
+# Carrega o modelo salvo previamente (ex: formato .keras ou .h5)
 model = tf.keras.models.load_model('modelo_frango.h5')
 
 
-#Defina a lista de classes na mesma ordem em que o modelo foi treinado
+# Defina a lista de classes na mesma ordem em que o modelo foi treinado
 CLASS_NAMES = ['Coccidiosis', 'Newcastle', 'Sadia', 'Salmonella']
+# Altere para as suas classes
 
-def predict_image(img_path):
-    # O MobileNetV2 exige imagens no tamanho 224x224
-    img = image.load_img(img_path, target_size=(180, 180))
+# Tamanho da imagem esperado pelo seu modelo (ex: 224x224)
+IMG_HEIGHT = 180
+IMG_WIDTH = 180
+
+
+def prepare_image(img_path):
+    # Carrega a imagem redimensionando para o tamanho padrão do modelo
+    img = image.load_img(img_path, target_size=(IMG_HEIGHT, IMG_WIDTH))
+    # Converte para array numpy
+
+
     x = image.img_to_array(img)
+    # Adiciona a dimensão do lote (batch), transformando em (1, altura, largura, canais)
     x = np.expand_dims(x, axis=0)
-    x = preprocess_input(x)
 
-    # Executa a previsão do modelo
-  #  preds = model.predict(x)
-    # Decodifica os top 3 resultados (Classe, Descrição, Probabilidade)
-  #  decoded_preds = decode_predictions(preds, top=3)[0]
+    # Se o seu modelo foi treinado com normalização (ex: dividido por 255.0), aplique aqui:
+    # x = x / 255.0
 
-    img_array = tf.keras.utils.img_to_array(img)
-    img_array = tf.expand_dims(img_array, 0)  # Create a batch
-
-    predictions = model.predict(img_array)
-    score = tf.nn.softmax(predictions[0])
+    return x
 
 
 @app.route('/')
 def index():
-#    return render_template('index.html')
+    return render_template('index.html')
 
-    
-    # Formata os resultados para envio fácil para o HTML
-#    results = []
- #   for imagenet_id, label, prob in decoded_preds:
-  #      results.append({"label": label, "prob": f"{prob * 100:.2f}%"})
-   # return results
+@app.route('/predict', methods=['POST'])
+def predict():
+    if 'file' not in request.files:
+        return jsonify({'error': 'Nenhum arquivo enviado'}), 400
 
-app.route('/predict', methods=['POST'])
-def index():
-    if request.method == 'POST':
-        # Verifica se o arquivo foi enviado no formulário HTML
-        if 'file' not in request.files:
-            return redirect(request.url)
-        
-        file = request.files['file']
-        
-        if file.filename == '':
-            return redirect(request.url)
-        
-        if file:
-            # Salva o arquivo localmente na pasta static/uploads
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-            file.save(filepath)
-            
-            # Executa a predição usando o TensorFlow
-            predictions = predict_image(filepath)
-            
-            # Renderiza a página enviando o caminho da imagem e os resultados da IA
-            return render_template('index.html', 
-                                   image_path=filepath, 
-                                   predictions=predictions)
-            
-    return render_template('index.html', image_path=None, predictions=None)
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'Arquivo inválido'}), 400
 
-if __name__ == '__main__':
-    app.run(debug=True)
+    # Salva temporariamente a imagem recebida
+    temp_path = './temp_image.jpg'
+    file.save(temp_path)
+
+    try:
+
+        img = tf.keras.utils.load_img(
+            temp_path, target_size=(180,180)
+        )
+
+        img_array = tf.keras.utils.img_to_array(img)
+        img_array = tf.expand_dims(img_array, 0)  # Create a batch
+
+        predictions = model.predict(img_array)
+        score = tf.nn.softmax(predictions[0])
+
+        print(
+
+          format(100 * np.max(score))
+        )
+
+
+        # Prepara a imagem e roda a predição
+        processed_image = prepare_image(temp_path)
+        predictions = model.predict(processed_image)
+
+        # Interpretando a classe vencedora
+        predicted_index = int(np.argmax(predictions[0]))
+     #   confidence = float(predictions[0][predicted_index])
+        confidence = float(np.max(score))
+        predicted_label = CLASS_NAMES[predicted_index]
+
+        # Retorna o resultado em JSON
+        result = {
+            'classe_vencedora': predicted_label,
+            'indice': predicted_index,
+            'confianca': f"{confidence * 100:.2f}%"
+
+
+        }
+        return jsonify(result)
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    finally:
+        # Remove o arquivo temporário
+        if os.path.exists(temp_path):
+           os.remove(temp_path)
+
+
+
+  if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
