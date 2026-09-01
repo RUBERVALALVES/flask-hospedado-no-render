@@ -44,7 +44,7 @@ def predict_image(img_path):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+#    return render_template('index.html')
 
     
     # Formata os resultados para envio fácil para o HTML
