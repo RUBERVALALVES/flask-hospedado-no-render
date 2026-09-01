@@ -39,8 +39,8 @@ def prepare_image(img_path):
 #    img = image.load_img(img_path, target_size=(IMG_HEIGHT, IMG_WIDTH))
     # Converte para array numpy
 
-    img = Image.open(io.BytesIO(img_path.read()))
-    img = img.resize((180, 180)) # Reduza para o tamanho exato que seu modelo espera
+#    img = Image.open(io.BytesIO(img_path.read()))
+#    img = img.resize((180, 180)) # Reduza para o tamanho exato que seu modelo espera
 
     
 
@@ -62,26 +62,21 @@ def index():
 def predict():
     if 'file' not in request.files:
         return jsonify({'error': 'Nenhum arquivo enviado'}), 400
-
-       imagem = request.files.get('imagem')
-    
-    if imagem:
-        # Agora você pode ler os dados binários da imagem
-        conteudo_binario = imagem.read()
-        return "Imagem recebida e lida com sucesso!"
-        
-    return "Nenhum arquivo enviado.", 400
-
-
     
     file = request.files['file']
     if file.filename == '':
         return jsonify({'error': 'Arquivo inválido'}), 400
 
    # Cria nome único para evitar conflitos em requisições concorrentes
-    temp_filename = f"temp_{uuid.uuid4().hex}.jpg"
-    temp_path = os.path.join('.', temp_filename)
-    file.save(temp_path)
+    #temp_filename = f"temp_{uuid.uuid4().hex}.jpg"
+    #temp_path = os.path.join('.', temp_filename)
+    #file.save(temp_path)
+
+    img_bytes = file.read()
+    image = Image.open(io.BytesIO(img_bytes)).convert('RGB')
+
+    return jsonify({'status': 'sucesso'})
+
     
     try:
        # Prepara imagem e realiza UMA única predição
