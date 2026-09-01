@@ -6,6 +6,7 @@ from flask import Flask, request, jsonify, render_template
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
+from tensorflow.keras.utils import img_to_array
 
 #comando para executar no terminal para testar servidor
 
@@ -30,7 +31,7 @@ def prepare_image(img_path):
     img = image.load_img(img_path, target_size=(IMG_HEIGHT, IMG_WIDTH))
     # Converte para array numpy
 
-     x = image.img_to_array(img)
+     x = img_to_array(img)
 
     # Adiciona a dimensão do lote (batch), transformando em (1, altura, largura, canais)
     x = np.expand_dims(x, axis=0)
