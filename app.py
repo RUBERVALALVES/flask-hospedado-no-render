@@ -37,8 +37,8 @@ def prepare_image(img_path):
 #    img = image.load_img(img_path, target_size=(IMG_HEIGHT, IMG_WIDTH))
     # Converte para array numpy
 
-img = Image.open(io.BytesIO(file.read()))
-img = img.resize((180, 180)) # Reduza para o tamanho exato que seu modelo espera
+    img = Image.open(io.BytesIO(img_path.read()))
+    img = img.resize((180, 180)) # Reduza para o tamanho exato que seu modelo espera
 
     
 
