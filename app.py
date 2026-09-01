@@ -63,9 +63,9 @@ def predict():
         return jsonify({'error': 'Arquivo inválido'}), 400
 
     # Salva temporariamente a imagem recebida
-#    temp_path = './temp_image.jpg'
- #   file.save(temp_path)
- #   file.seek(0) 
+    temp_path = './temp_image.jpg'
+    file.save(temp_path)
+    file.seek(0) 
     try:
 
   #      img2 = tf.keras.utils.load_img(
