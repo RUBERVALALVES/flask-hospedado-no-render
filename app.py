@@ -19,7 +19,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 MODEL_PATH = 'modelo_frango.keras'
 model = load_model(MODEL_PATH)
 
-Defina a lista de classes na mesma ordem em que o modelo foi treinado
+#Defina a lista de classes na mesma ordem em que o modelo foi treinado
 CLASS_NAMES = ['Coccidiosis', 'Newcastle', 'Sadia', 'Salmonella']
 
 def predict_image(img_path):
