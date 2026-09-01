@@ -75,9 +75,7 @@ def predict():
     img_bytes = file.read()
     image = Image.open(io.BytesIO(img_bytes)).convert('RGB')
 
-    return jsonify({'status': 'sucesso'})
-
-    
+      
     try:
        # Prepara imagem e realiza UMA única predição
         processed_image = prepare_image(temp_path)
