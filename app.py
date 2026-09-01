@@ -4,6 +4,7 @@ import numpy as np
 from flask import Flask, request, jsonify, render_template
 import tensorflow as tf
 from tensorflow.keras.preprocessing import image
+from PIL import Image
 
 # Desativa logs excessivos e força CPU
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
