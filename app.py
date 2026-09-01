@@ -65,15 +65,14 @@ def predict():
     # Salva temporariamente a imagem recebida
 #    temp_path = './temp_image.jpg'
  #   file.save(temp_path)
-    file.seek(0) 
+ #   file.seek(0) 
     try:
 
   #      img2 = tf.keras.utils.load_img(
    #        temp_path, target_size=(180,180)
         )
 
- 
-        img_bytes = file.read()
+         img_bytes = file.read()
         img = Image.open(io.BytesIO(img_bytes)).resize((180,180))
     #    img.verify()
         
@@ -84,7 +83,6 @@ def predict():
         score = tf.nn.softmax(predictions[0])
 
         print(
-
           format(100 * np.max(score))
         )
 
@@ -94,7 +92,8 @@ def predict():
 
 
         # Prepara a imagem e roda a predição
-        processed_image = prepare_image(temp_path)
+        processed_image = prepare_image(img)
+      #  processed_image = prepare_image(temp_path)
         predictions = model.predict(processed_image)
 
         # Interpretando a classe vencedora
