@@ -1,42 +1,14 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Classificador de Imagens - TensorFlow & Flask</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; text-align: center; }
-        .result-container { margin-top: 30px; border: 1px solid #ddd; padding: 20px; border-radius: 8px; }
-        img { max-width: 100%; max-height: 300px; border-radius: 4px; margin-bottom: 15px; }
-        ul { list-style: none; padding: 0; }
-        li { padding: 8px; margin: 5px 0; background: #f4f4f4; border-left: 5px solid #007bff; text-align: left; }
-    </style>
+    <title>Teste de Modelo TensorFlow</title>
 </head>
 <body>
-
-    <h2>Envie uma imagem para classificação</h2>
-    
-    <!-- O atributo enctype="multipart/form-data" é obrigatório para envio de arquivos -->
-    <form method="POST" enctype="multipart/form-data">
+    <h1>Envie uma imagem para teste</h1>
+    <form action="/predict" method="POST" enctype="multipart/form-data">
         <input type="file" name="file" accept="image/*" required>
-        <br><br>
-        <button type="submit" style="padding: 10px 20px; cursor: pointer;">Classificar com IA</button>
+        <button type="submit">Enviar e Prever</button>
     </form>
-
-    <!-- Exibe esta seção somente se houver uma imagem processada -->
-    {% if image_path %}
-        <div class="result-container">
-            <h3>Resultado da Análise</h3>
-            <img src="{{ url_for('static', filename=image_path.split('static/')[1]) }}" alt="Imagem enviada">
-            
-            <h4>Previsões do Modelo:</h4>
-            <ul>
-                {% for pred in predictions %}
-                    <li><strong>{{ pred.label }}</strong>: {{ pred.prob }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
-
 </body>
 </html>
