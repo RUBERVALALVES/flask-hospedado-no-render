@@ -1,13 +1,14 @@
 import os
-# Desativa logs excessivos do TensorFlow
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
-# Força o TensorFlow a rodar estritamente usando apenas a CPU
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+import uuid
 import numpy as np
 from flask import Flask, request, jsonify, render_template
 import tensorflow as tf
-from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
+
+# Desativa logs excessivos e força CPU
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+
 tf.config.threading.set_intra_op_parallelism_threads(1)
 tf.config.threading.set_inter_op_parallelism_threads(1)
 
@@ -24,7 +25,7 @@ model = tf.keras.models.load_model('modelo_frango.h5')
 
 # Defina a lista de classes na mesma ordem em que o modelo foi treinado
 CLASS_NAMES = ['Coccidiosis', 'Newcastle', 'Sadia', 'Salmonella']
-# Altere para as suas classes
+
 
 # Tamanho da imagem esperado pelo seu modelo (ex: 224x224)
 IMG_HEIGHT = 180
@@ -60,47 +61,32 @@ def predict():
     if file.filename == '':
         return jsonify({'error': 'Arquivo inválido'}), 400
 
-    # Salva temporariamente a imagem recebida
-    temp_path = './temp_image.jpg'
+   # Cria nome único para evitar conflitos em requisições concorrentes
+    temp_filename = f"temp_{uuid.uuid4().hex}.jpg"
+    temp_path = os.path.join('.', temp_filename)
     file.save(temp_path)
-
+    
     try:
-
-        img = tf.keras.utils.load_img(
-            temp_path, target_size=(180,180)
-        )
-
-        img_array = tf.keras.utils.img_to_array(img)
-        img_array = tf.expand_dims(img_array, 0)  # Create a batch
-
-        predictions = model.predict(img_array)
-        score = tf.nn.softmax(predictions[0])
-
-        print(
-
-          format(100 * np.max(score))
-        )
-
-
-        # Prepara a imagem e roda a predição
+       # Prepara imagem e realiza UMA única predição
         processed_image = prepare_image(temp_path)
         predictions = model.predict(processed_image)
+        
+        # Aplica Softmax se o modelo não tiver Softmax na camada de saída
+        score = tf.nn.softmax(predictions[0]).numpy()
 
-        # Interpretando a classe vencedora
-        predicted_index = int(np.argmax(predictions[0]))
-     #   confidence = float(predictions[0][predicted_index])
-        confidence = float(np.max(score))
+        predicted_index = int(np.argmax(score))
+        confidence = float(score[predicted_index])
         predicted_label = CLASS_NAMES[predicted_index]
 
-        # Retorna o resultado em JSON
         result = {
             'classe_vencedora': predicted_label,
             'indice': predicted_index,
             'confianca': f"{confidence * 100:.2f}%"
-
-
         }
         return jsonify(result)
+   
+
+  
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -111,4 +97,5 @@ def predict():
            os.remove(temp_path)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
