@@ -1,4 +1,8 @@
 import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'  # Desativa GPU
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'   # Reduz logs inúteis no terminal
+import tensorflow as tf
+
 import numpy as np
 import tensorflow as tf
 from flask import Flask, request, jsonify, render_template
