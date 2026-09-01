@@ -16,8 +16,9 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Carrega o modelo pré-treinado MobileNetV2 do TensorFlow
 # Ele é capaz de reconhecer 1.000 categorias de objetos diferentes
-MODEL_PATH = '/modelo_frango.keras'
-model = load_model(MODEL_PATH)
+
+model = tf.keras.models.load_model('modelo_frango.h5')
+
 
 #Defina a lista de classes na mesma ordem em que o modelo foi treinado
 CLASS_NAMES = ['Coccidiosis', 'Newcastle', 'Sadia', 'Salmonella']
