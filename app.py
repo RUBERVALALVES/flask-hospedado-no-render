@@ -53,7 +53,7 @@ def index():
   #      results.append({"label": label, "prob": f"{prob * 100:.2f}%"})
    # return results
 
-@app.route('/predict', methods=['GET', 'POST'])
+app.route('/predict', methods=['POST'])
 def index():
     if request.method == 'POST':
         # Verifica se o arquivo foi enviado no formulário HTML
