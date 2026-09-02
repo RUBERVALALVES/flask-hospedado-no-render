@@ -1,9 +1,13 @@
 import gc
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' # Reduz logs inúteis do TF
 from flask import Flask, render_template, request, send_from_directory
 from tensorflow.keras.models import load_model
 import tensorflow.keras.preprocessing.image
+# Força o TF a usar menos memória e otimizar para CPU
+tensorflow.config.threading.set_interop_thread_pool_size(1)
+tensorflow.config.threading.set_intra_thread_pool_size(1)
 import numpy as np
 
 # Initialize Flask app
