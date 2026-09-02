@@ -1,8 +1,10 @@
 import gc
 import os
+# Desativa o uso de GPU (Render CPU não possui GPU nos planos básicos)
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+# Reduz o nível de log do TF para economizar processamento
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 import tensorflow as tf
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' # Reduz logs inúteis do TF
 from flask import Flask, render_template, request, send_from_directory
 from tensorflow.keras.models import load_model
 import tensorflow.keras.preprocessing.image
@@ -20,6 +22,15 @@ app = Flask(__name__)
 # Class labels
 class_labels = ['Coccidiosis', 'Newcastle', 'Sadia', 'Salmonella']
 
+modelo = None
+
+def carregar_modelo():
+    global modelo
+    if modelo is None:
+        modelo = tf.keras.models.load_model('modelo_frango.h5')
+    return modelo
+
+
 # Define the uploads folder
 UPLOAD_FOLDER = './uploads'
 if not os.path.exists(UPLOAD_FOLDER):
@@ -30,7 +41,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Helper function to predict tumor type
 def predict_tumor(image_path):
 
-    model = load_model('modelo_frango.h5')
+  #  model = load_model('modelo_frango.h5')
     IMAGE_SIZE = 180
     img = tensorflow.keras.preprocessing.image.load_img(image_path, target_size=(IMAGE_SIZE, IMAGE_SIZE))
     img_array = tensorflow.keras.preprocessing.image.img_to_array(img) / 255.0  # Normalize pixel values
