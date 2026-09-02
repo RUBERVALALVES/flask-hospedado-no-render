@@ -31,8 +31,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def predict_tumor(image_path):
     IMAGE_SIZE = 180
     img = tensorflow.keras.preprocessing.image.load_img(image_path, target_size=(IMAGE_SIZE, IMAGE_SIZE))
-   # img_array = tensorflow.keras.preprocessing.image.img_to_array(img) / 255.0  # Normalize pixel values
-    img_array = np.expand_dims(img, axis=0)  # Add batch dimension
+    img_array = tensorflow.keras.preprocessing.image.img_to_array(img) / 255.0  # Normalize pixel values
+    img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
 
     predictions = model.predict(img_array)
     predicted_class_index = np.argmax(predictions, axis=1)[0]
