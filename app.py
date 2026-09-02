@@ -1,77 +1,44 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '-1'  # Desativa GPU
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'   # Reduz logs inúteis no terminal
+from flask import Flask, request, jsonify
 import tensorflow as tf
-
 import numpy as np
-import tensorflow as tf
-from flask import Flask, request, jsonify, render_template
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing import image
 from PIL import Image
 import io
 
 app = Flask(__name__)
 
-# Carrega o modelo de aprendizado de máquina
-model = tf.keras.models.load_model('modelo_frango.h5')
+# Carrega o modelo uma única vez na inicialização
+MODEL_PATH = "modelo_frango.h5"
+model = tf.keras.models.load_model(MODEL_PATH)
 
-
-# Ajuste as dimensões de acordo com o seu modelo
-IMG_WIDTH, IMG_HEIGHT = 180, 180 
-
-def preprocess_image(img_bytes):
-    # Abre a imagem a partir dos bytes recebidos
-    img = Image.open(io.BytesIO(img_bytes))
-    if img.mode != 'RGB':
-        img = img.convert('RGB')
-    
-    # Redimensiona para o tamanho esperado pelo modelo
-    img = img.resize((IMG_WIDTH, IMG_HEIGHT))
-    
-    # Converte para array numpy e normaliza (ajuste se seu modelo exige normalização diferente)
-    img_array = image.img_to_array(img)
+def prepare_image(image_bytes):
+    # Altere o tamanho (180, 180) para o formato exigido pelo seu modelo
+    img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+    img = img.resize((180, 180))
+    img_array = tf.keras.preprocessing.image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
-    #img_array /= 255.0  
-    
-    return img_array
+ #   return img_array / 255.0  # Normalização (se o seu modelo exigir)
 
-@app.route('/', methods=['GET'])
-def index():
-    # Renderiza a interface web
-    return render_template('index.html')
-
-@app.route('/predict', methods=['POST'])
+@app.route("/predict", methods=["POST"])
 def predict():
-    if 'file' not in request.files:
-        return jsonify({'error': 'Nenhum arquivo enviado'}), 400
-    
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({'error': 'Nenhum arquivo selecionado'}), 400
-
+    if "file" not in request.files:
+        return jsonify({"error": "Nenhum arquivo enviado"}), 400
+        
+    file = request.files["file"]
     try:
-        img_bytes = file.read()
-        processed_img = preprocess_image(img_bytes)
+        image_bytes = file.read()
+        prepared_img = prepare_image(image_bytes)
         
-        # Executa a predição
-        predictions = model.predict(processed_img)
+        # Realiza a predição
+        predictions = model.predict(prepared_img)
+        prediction_list = predictions.tolist()
         
-        # Exemplo para classificação binária ou multiclasse
-        # Ajuste a extração da classe/probabilidade de acordo com a saída do seu modelo
-        predicted_class = int(np.argmax(predictions, axis=1)[0])
-        confidence = float(np.max(predictions))
-
-        return jsonify({
-            'success': True,
-            'prediction': predicted_class,
-            'confidence': confidencet
-        })
-        tf.Keras.clear_session()
+        return jsonify({"predictions": prediction_list})
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
-        
-if __name__ == '__main__':
-    # Obtém a porta configurada no ambiente (essencial para o Render)
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+        return jsonify({"error": str(e)}), 500
+
+if __name__ == "__main__":
+    # O Render define a porta automaticamente através da variável de ambiente PORT
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
+
