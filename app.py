@@ -27,8 +27,8 @@ modelo = None
 def carregar_modelo():
     global modelo
     if modelo is None:
-        modelo = tf.keras.models.load_model('modelo_frango.h5')
-    return modelo
+        model = tf.keras.models.load_model('modelo_frango.h5')
+    return model
 
 
 # Define the uploads folder
