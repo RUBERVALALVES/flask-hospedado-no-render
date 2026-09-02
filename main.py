@@ -59,6 +59,24 @@ def getPrediction(filename):
     print(f"Classe detectada: {classes[predicted_index]} com confiança {confidence:.2f}")
 
 
+
+    ## colocado ##
+  # Interpretando a classe vencedora
+        predicted_index = int(np.argmax(predictions[0]))
+     #   confidence = float(predictions[0][predicted_index])
+        confidence = float(np.max(score))
+        predicted_label = CLASS_NAMES[predicted_index]
+
+        # Retorna o resultado em JSON
+        result = {
+            'classe_vencedora': predicted_label,
+            'indice': predicted_index,
+            'confianca': f"{confidence * 100:.2f}%"}
+
+
+
+   ##colocado##
+    
     
     #predicted_index = int(np.argmax(output_data))
     #confidence = float(output_data[predicted_index])
