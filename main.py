@@ -5,7 +5,7 @@ import os
 from ai_edge_litert.interpreter import Interpreter
 
 interpreter = Interpreter(model_path="modelo_otimizado.tflite")
-
+#https://github.com/pradeep583/Disease_prediction/blob/main/main.py
 
 # Load TFLite model
 #interpreter = tflite.Interpreter(model_path="modelo_otimizado.tflite")
