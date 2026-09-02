@@ -1,8 +1,9 @@
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 from flask import Flask, render_template, request, send_from_directory
 from tensorflow.keras.models import load_model
 import tensorflow.keras.preprocessing.image
 import numpy as np
-import os
 
 # Initialize Flask app
 app = Flask(__name__)
