@@ -1,6 +1,6 @@
 import numpy as np
 from PIL import Image
-import tflite_runtime.interpreter as tflite
+#import tflite_runtime.interpreter as tflite
 import os
 from ai_edge_litert.interpreter import Interpreter
 
