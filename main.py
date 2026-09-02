@@ -14,7 +14,7 @@ interpreter.allocate_tensors()
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 
-CLASS_NAMES = ['Coccidiosis', 'Newcastle', 'Sadia', 'Salmonella']
+classes = ['Coccidiosis', 'Newcastle', 'Sadia', 'Salmonella']
 
 def getPrediction(filename):
     SIZE = 180
@@ -25,9 +25,9 @@ def getPrediction(filename):
 
     # Handle input dtype
     input_dtype = input_details[0]['dtype']
-    if input_dtype == np.float32:
-        img = np.asarray(img, dtype=np.float32) / 255.0
-    elif input_dtype == np.uint8:
+  #  if input_dtype == np.float32:
+   #     img = np.asarray(img, dtype=np.float32) / 255.0
+     if input_dtype == np.uint8:
         img = np.asarray(img, dtype=np.uint8)
     else:
         raise ValueError(f"Unsupported dtype: {input_dtype}")
