@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Corn Disease Prediction</title>
+  <title>Previsão Doenças em Aves</title>
   <style>
     body {
       background-color: #f7f7f7;
@@ -93,7 +93,7 @@
   <div class="container">
     <h2>Corn Disease Prediction</h2>
 
-    <h4>Select a corn leaf image to diagnose</h4>
+    <h4>Selecione uma imagem de fezes de Frango para Diagnosticar</h4>
 
     <form method="post" action="/" enctype="multipart/form-data">
       <div class="file-box">
@@ -111,7 +111,7 @@
 
     {% if prediction and image %}
     <div class="diagnosis-section">
-      <h3>Diagnosis & Recommendation</h3>
+      <h3>Diagnostico</h3>
       <p>{{ prediction }}</p>
       <img src="{{ image }}" alt="Uploaded Image" class="diagnosis-image">
     </div>
