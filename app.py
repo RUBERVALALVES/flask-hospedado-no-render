@@ -15,7 +15,7 @@ import numpy as np
 app = Flask(__name__)
 
 # Load the trained model
-model = load_model('modelo_frango.h5')
+#model = load_model('modelo_frango.h5')
 
 # Class labels
 class_labels = ['Coccidiosis', 'Newcastle', 'Sadia', 'Salmonella']
@@ -29,6 +29,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Helper function to predict tumor type
 def predict_tumor(image_path):
+
+    model = load_model('modelo_frango.h5')
     IMAGE_SIZE = 180
     img = tensorflow.keras.preprocessing.image.load_img(image_path, target_size=(IMAGE_SIZE, IMAGE_SIZE))
     img_array = tensorflow.keras.preprocessing.image.img_to_array(img) / 255.0  # Normalize pixel values
