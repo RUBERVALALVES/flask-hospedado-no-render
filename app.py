@@ -14,7 +14,7 @@ import io
 app = Flask(__name__)
 
 # Carrega o modelo de aprendizado de máquina
-model = tf.keras.models.load_model('modelo_otimizado.tflite')
+model = tf.keras.models.load_model('modelo_frango.keras')
 
 
 # Ajuste as dimensões de acordo com o seu modelo
