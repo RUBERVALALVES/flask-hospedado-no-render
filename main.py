@@ -4,21 +4,16 @@ import tflite_runtime.interpreter as tflite
 import os
 
 # Load TFLite model
-interpreter = tflite.Interpreter(model_path="model/model.tflite")
+interpreter = tflite.Interpreter(model_path="modelo_otimizado.tflite")
 interpreter.allocate_tensors()
 
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 
-classes = [
-    "Blight - Recommended: Bavistin + Captan (1:1 ratio, 2g/kg seed treatment)",
-    "Common Rust - Recommended: 3g Katyayani Trichoderm in 1L water, evening foliar spray",
-    "Gray Leaf Spot - Recommended: Apply NPK in 120:60:40 kg/ha ratio",
-    "Healthy - No treatment required"
-]
+classes = ['Coccidiosis', 'Newcastle', 'Sadia', 'Salmonella"]
 
 def getPrediction(filename):
-    SIZE = 128
+    SIZE = 180
     img_path = os.path.join("static", filename)
 
     # Load + resize
