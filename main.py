@@ -10,7 +10,7 @@ interpreter.allocate_tensors()
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 
-classes = ['Coccidiosis', 'Newcastle', 'Sadia', 'Salmonella"]
+classes = ['Coccidiosis', 'Newcastle', 'Sadia', 'Salmonella']
 
 def getPrediction(filename):
     SIZE = 180
