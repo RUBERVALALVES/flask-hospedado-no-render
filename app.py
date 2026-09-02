@@ -37,7 +37,7 @@ def predict_tumor(image_path):
     gc.collect()
     
     if class_labels[predicted_class_index] == 'Sadia':
-        return "Ave Saudável, confidence_score
+        return "Ave Saudavel", confidence_score
     else:
         return f"Doença: {class_labels[predicted_class_index]}", confidence_score
 
