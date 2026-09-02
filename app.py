@@ -1,3 +1,4 @@
+import gc
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 from flask import Flask, render_template, request, send_from_directory
@@ -32,10 +33,13 @@ def predict_tumor(image_path):
     predicted_class_index = np.argmax(predictions, axis=1)[0]
     confidence_score = np.max(predictions, axis=1)[0]
 
-    if class_labels[predicted_class_index] == 'notumor':
-        return "No Tumor", confidence_score
+    tf.keras.backend.clear_session()
+    gc.collect()
+    
+    if class_labels[predicted_class_index] == 'Sadia':
+        return "Ave Saudável, confidence_score
     else:
-        return f"Tumor: {class_labels[predicted_class_index]}", confidence_score
+        return f"Doença: {class_labels[predicted_class_index]}", confidence_score
 
 # Route for the main page (index.html)
 @app.route('/', methods=['GET', 'POST'])
