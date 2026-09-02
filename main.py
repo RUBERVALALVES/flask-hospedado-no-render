@@ -2,9 +2,13 @@ import numpy as np
 from PIL import Image
 import tflite_runtime.interpreter as tflite
 import os
+from ai_edge_litert.interpreter import Interpreter
+
+interpreter = Interpreter(model_path="modelo_otimizado.tflite")
+
 
 # Load TFLite model
-interpreter = tflite.Interpreter(model_path="modelo_otimizado.tflite")
+#interpreter = tflite.Interpreter(model_path="modelo_otimizado.tflite")
 interpreter.allocate_tensors()
 
 input_details = interpreter.get_input_details()
