@@ -17,19 +17,10 @@ import numpy as np
 app = Flask(__name__)
 
 # Load the trained model
-#model = load_model('modelo_frango.h5')
+model = load_model('modelo_frango.h5')
 
 # Class labels
 class_labels = ['Coccidiosis', 'Newcastle', 'Sadia', 'Salmonella']
-
-modelo = None
-
-def carregar_modelo():
-    global modelo
-    if modelo is None:
-        model = tf.keras.models.load_model('modelo_frango.h5')
-    return model
-
 
 # Define the uploads folder
 UPLOAD_FOLDER = './uploads'
@@ -41,11 +32,10 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Helper function to predict tumor type
 def predict_tumor(image_path):
 
-  #  model = load_model('modelo_frango.h5')
     IMAGE_SIZE = 180
     img = tensorflow.keras.preprocessing.image.load_img(image_path, target_size=(IMAGE_SIZE, IMAGE_SIZE))
-    img_array = tensorflow.keras.preprocessing.image.img_to_array(img) / 255.0  # Normalize pixel values
-    img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
+    #img_array = tensorflow.keras.preprocessing.image.img_to_array(img) / 255.0  # Normalize pixel values
+    img_array = np.expand_dims(img, axis=0)  # Add batch dimension
 
     predictions = model.predict(img_array)
     predicted_class_index = np.argmax(predictions, axis=1)[0]
