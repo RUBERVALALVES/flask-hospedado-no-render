@@ -7,8 +7,8 @@ from flask import Flask, render_template, request, send_from_directory
 from tensorflow.keras.models import load_model
 import tensorflow.keras.preprocessing.image
 # Força o TF a usar menos memória e otimizar para CPU
-tf.config.threading.set_interop_thread_pool_size(1)
-tf.config.threading.set_intra_thread_pool_size(1)
+tf.config.threading.set_inter_op_parallelism_threads(4)
+tf.config.threading.set_intra_op_parallelism_threads(4)
 import numpy as np
 
 # Initialize Flask app
