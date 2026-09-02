@@ -65,7 +65,7 @@ def getPrediction(filename):
     #predicted_index = int(np.argmax(output_data))
     #confidence = float(output_data[predicted_index])
 
-    if confidence < 50:  
+    if confidence < 0.5:  
         return "Invalid"
     return classes[predicted_index]
 
