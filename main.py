@@ -42,7 +42,7 @@ def getPrediction(filename):
     interpreter.invoke()
 
     output_data = interpreter.get_tensor(output_details[0]['index'])[0]
-# Se o modelo for quantizado (uint8), de-quantizar para obter probabilidades
+    # Se o modelo for quantizado (uint8), de-quantizar para obter probabilidades
     if output_details[0]['dtype'] == np.uint8:
         scale, zero_point = output_details[0]['quantization']
         if scale > 0:
@@ -59,13 +59,13 @@ def getPrediction(filename):
     print(f"Classe detectada: {classes[predicted_index]} com confiança {confidence:.2f}")
 
 
-
+     
     
     
     #predicted_index = int(np.argmax(output_data))
     #confidence = float(output_data[predicted_index])
 
     if confidence < 0.5:  
-        return "Invalid"
-    return classes[predicted_index]
+        return "Imagem Invalida"
+    return classes[predicted_index,  f"{confidence * 100:.2f}%"]
 
