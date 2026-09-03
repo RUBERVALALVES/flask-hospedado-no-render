@@ -8,32 +8,11 @@ interpreter = Interpreter(model_path="modelo_otimizado.tflite")
 #https://github.com/pradeep583/Disease_prediction/blob/main/main.py
 
 interpreter.allocate_tensors()
-
-##aqui
-
-# 2. Definir a Temperatura (T > 1 suaviza as saídas; calibrada via validação)
-T = 2.5 
-
-def predict_with_temperature(image_batch, temperature):
-    # Inserido na etapa de predição
-    logits = model_path(image_batch, training=False)
-    
-    # Aplica o escalonamento antes da Softmax
-    scaled_logits = logits / temperature
-    probabilidadetemp = tf.nn.softmax(scaled_logits)
-    
-    return probabilidadetemp
-
-
-##aqui
-
-
-
+  
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 
 classes = ['Coccidiosis', 'Newcastle', 'Sadia', 'Salmonella']
-#CLASS_NAMES = ['Coccidiosis', 'Newcastle', 'Sadia', 'Salmonella']
 
 def getPrediction(filename):
     SIZE = 180
@@ -43,7 +22,6 @@ def getPrediction(filename):
     img = Image.open(img_path).convert("RGB").resize((SIZE, SIZE))
     img_array = np.array(img, dtype=np.float32)
 
-    
     # Handle input dtype
     input_dtype = input_details[0]['dtype']
     if input_dtype == np.float32:
@@ -55,6 +33,7 @@ def getPrediction(filename):
 
     #img = np.expand_dims(img, axis=0)
     img_array = np.expand_dims(img_array, axis=0)
+       
     # Run inference
     interpreter.set_tensor(input_details[0]['index'], img_array)
     interpreter.invoke()
@@ -75,11 +54,17 @@ def getPrediction(filename):
 
     print(f"Predições/Probabilidades: {probabilities}") # Para você depurar no terminal
     print(f"Classe detectada: {classes[predicted_index]} com confiança {confidence:.2f}")
-    probabilidades_calibradas = predict_with_temperature(img_path, T)
-        
-    #predicted_index = int(np.argmax(output_data))
-    #confidence = float(output_data[predicted_index])
 
+# Calcula a entropia da distribuição de probabilidade
+entropy = -np.sum(probabilities * np.log(probabilities + 1e-10))
+max_entropy = np.log(len(classes))  # Maior incerteza possível
+
+# Se a entropia estiver muito alta (ex: acima de 60-70% do máximo), a imagem é estranha
+if (entropy / max_entropy) > 0.6:
+    return "Imagem Inválida / Desconhecida (Incerteza alta)"
+
+
+    
     if confidence < 75:  
         return "Imagem Invalida ou pouco confiança"
     return classes[predicted_index],  confidence, probabilities, probabilidades_calibradas, probabilidadetemp
