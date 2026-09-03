@@ -56,12 +56,12 @@ def getPrediction(filename):
     print(f"Classe detectada: {classes[predicted_index]} com confiança {confidence:.2f}")
 
 # Calcula a entropia da distribuição de probabilidade
-entropy = -np.sum(probabilities * np.log(probabilities + 1e-10))
-max_entropy = np.log(len(classes))  # Maior incerteza possível
+  entropy = -np.sum(probabilities * np.log(probabilities + 1e-10))
+  max_entropy = np.log(len(classes))  # Maior incerteza possível
 
 # Se a entropia estiver muito alta (ex: acima de 60-70% do máximo), a imagem é estranha
-if (entropy / max_entropy) > 0.6:
-return "Imagem Inválida"
+  if entropy / max_entropy > 0.6:
+  return "Imagem Inválida"
 
 
     
