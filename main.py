@@ -67,5 +67,5 @@ def getPrediction(filename):
 
     if confidence < 0.5:  
         return "Imagem Invalida"
-    return classes[predicted_index],  confidence
+    return classes[predicted_index],  confidence, probabilities
 
