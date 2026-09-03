@@ -61,7 +61,7 @@ max_entropy = np.log(len(classes))  # Maior incerteza possível
 
 # Se a entropia estiver muito alta (ex: acima de 60-70% do máximo), a imagem é estranha
 if (entropy / max_entropy) > 0.6:
-    return "Imagem Inválida / Desconhecida (Incerteza alta)"
+return "Imagem Inválida"
 
 
     
