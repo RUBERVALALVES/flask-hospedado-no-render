@@ -52,7 +52,7 @@ def submit_file():
         result = getPrediction(filename)
 
         if result == "Invalid":
-            return render_template('client.html', error_message="Please upload a corn leaf photo.")
+            return render_template('client.html', error_message="Por favor, envie uma foto de fezes do Frango")
         else:
             return render_template('client.html', prediction=result, image='/' + file_path)
 
