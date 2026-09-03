@@ -16,7 +16,7 @@ T = 2.5
 
 def predict_with_temperature(image_batch, temperature):
     # Inserido na etapa de predição
-    logits = model(image_batch, training=False)
+    logits = model_path(image_batch, training=False)
     
     # Aplica o escalonamento antes da Softmax
     scaled_logits = logits / temperature
