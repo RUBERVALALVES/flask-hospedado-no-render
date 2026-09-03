@@ -61,11 +61,10 @@ def getPrediction(filename):
 
      
     
-    
     #predicted_index = int(np.argmax(output_data))
     #confidence = float(output_data[predicted_index])
 
     if confidence < 0.5:  
         return "Imagem Invalida"
-    return classes[predicted_index],  confidence, probabilities
+    return classes[predicted_index],  confidence, probabilities, exp_preds
 
