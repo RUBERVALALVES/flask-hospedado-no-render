@@ -63,5 +63,5 @@ def getPrediction(filename):
     
     if confidence < 75 or entropy / max_entropy > 0.6:  
         return "Imagem Invalida ou pouco confiança"
-    return classes[predicted_index],  confidence, probabilities
+    return classes[predicted_index],  confidence, probabilities, entropy, max_entropy
 
