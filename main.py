@@ -7,9 +7,27 @@ from ai_edge_litert.interpreter import Interpreter
 interpreter = Interpreter(model_path="modelo_otimizado.tflite")
 #https://github.com/pradeep583/Disease_prediction/blob/main/main.py
 
-# Load TFLite model
-#interpreter = tflite.Interpreter(model_path="modelo_otimizado.tflite")
 interpreter.allocate_tensors()
+
+##aqui
+
+# 2. Definir a Temperatura (T > 1 suaviza as saídas; calibrada via validação)
+T = 2.5 
+
+def predict_with_temperature(image_batch, temperature):
+    # Inserido na etapa de predição
+    logits = model(image_batch, training=False)
+    
+    # Aplica o escalonamento antes da Softmax
+    scaled_logits = logits / temperature
+    probabilidadetemp = tf.nn.softmax(scaled_logits)
+    
+    return probabilidadetemp
+
+
+##aqui
+
+
 
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
@@ -57,12 +75,12 @@ def getPrediction(filename):
 
     print(f"Predições/Probabilidades: {probabilities}") # Para você depurar no terminal
     print(f"Classe detectada: {classes[predicted_index]} com confiança {confidence:.2f}")
-
+    probabilidades_calibradas = predict_with_temperature(img_imagens, T)
         
     #predicted_index = int(np.argmax(output_data))
     #confidence = float(output_data[predicted_index])
 
-    if confidence < 50:  
-        return "Imagem Invalida"
-    return classes[predicted_index],  confidence, probabilities
+    if confidence < 75:  
+        return "Imagem Invalida ou pouco confiança"
+    return classes[predicted_index],  confidence, probabilities, probabilidades_calibradas, probabilidadetemp
 
