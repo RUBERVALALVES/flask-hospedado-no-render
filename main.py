@@ -75,7 +75,7 @@ def getPrediction(filename):
 
     print(f"Predições/Probabilidades: {probabilities}") # Para você depurar no terminal
     print(f"Classe detectada: {classes[predicted_index]} com confiança {confidence:.2f}")
-    probabilidades_calibradas = predict_with_temperature(img_imagens, T)
+    probabilidades_calibradas = predict_with_temperature(img_array, T)
         
     #predicted_index = int(np.argmax(output_data))
     #confidence = float(output_data[predicted_index])
