@@ -95,9 +95,8 @@
 
     <h4>Selecione uma imagem de fezes de Frango para Diagnostico</h4>
 
-    <img src="frango.jpg" alt="FRANGAO" style="max-width: 100%; height: auto;">
-    
-    <form method="post" action="/" enctype="multipart/form-data">
+      <img src="{{ url_for('static', filename='frango.jpg') }}" alt="FRANGAO" style="max-width: 100%; height: auto;"> 
+      <form method="post" action="/" enctype="multipart/form-data">
       <div class="file-box">
         <input type="file" name="file" required>
       </div>
