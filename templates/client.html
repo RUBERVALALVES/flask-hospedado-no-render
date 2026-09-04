@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="stylesheet" href="style.css"
   <meta charset="UTF-8">
   <title>Previsão Doenças em Aves</title>
   <style>
@@ -95,6 +96,11 @@
 
     <h4>Selecione uma imagem de fezes de Frango para Diagnostico</h4>
 
+    <div class="container">
+     <img src="{{ url_for('static', filename='frango2.jpg') }}" alt="FRANGAO" style="max-width: 30%; height: auto;"> 
+     <p>Este texto vai ficar posicionado ao lado da imagem carregada.</p>
+     </div>
+    
       <img src="{{ url_for('static', filename='frango2.jpg') }}" alt="FRANGAO" style="max-width: 30%; height: auto;"> 
       <form method="post" action="/" enctype="multipart/form-data">
       <div class="file-box">
