@@ -49,8 +49,8 @@ def getPrediction(filename):
     exp_preds = np.exp(output_data - np.max(output_data))
     probabilities = exp_preds / np.sum(exp_preds)
 
-    predicted_index = int(np.argmax(probabilities))
-    confidence = float(probabilities[predicted_index]*100)
+   # predicted_index = int(np.argmax(probabilities))
+   # confidence = float(probabilities[predicted_index]*100)
 
     print(f"Predições/Probabilidades: {probabilities}") # Para você depurar no terminal
     print(f"Classe detectada: {classes[predicted_index]} com confiança {confidence:.2f}")
