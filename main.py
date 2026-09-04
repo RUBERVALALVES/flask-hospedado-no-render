@@ -15,7 +15,7 @@ output_details = interpreter.get_output_details()
 classes = ['Coccidiosis', 'Newcastle', 'Outros', 'Sadia', 'Salmonella']
 
 def getPrediction(filename):
-    SIZE = 180
+    SIZE = 224
     img_path = os.path.join("static", filename)
 
     # Load + resize
