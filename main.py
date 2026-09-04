@@ -4,7 +4,7 @@ from PIL import Image
 import os
 from ai_edge_litert.interpreter import Interpreter
 
-interpreter = Interpreter(model_path="modelo_otimizado.tflite")
+interpreter = Interpreter(model_path="modelo_otimizado2.tflite")
 #https://github.com/pradeep583/Disease_prediction/blob/main/main.py
 
 interpreter.allocate_tensors()
@@ -12,7 +12,7 @@ interpreter.allocate_tensors()
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 
-classes = ['Coccidiosis', 'Newcastle', 'Sadia', 'Salmonella']
+classes = ['Coccidiosis', 'Newcastle', 'Outros', 'Sadia', 'Salmonella']
 
 def getPrediction(filename):
     SIZE = 180
@@ -59,6 +59,6 @@ def getPrediction(filename):
     entropy = -np.sum(probabilities * np.log(probabilities + 1e-10))
     max_entropy = np.log(len(classes))  # Maior incerteza possível
 
-    if confidence < 75 or entropy / max_entropy > 0.6 or img_array.std() <15:
+    if confidence < 75 or entropy / max_entropy > 0.6:
         return "Imagem Invalida ou pouco confiança"
     return classes[predicted_index],  confidence, probabilities, entropy, max_entropy
