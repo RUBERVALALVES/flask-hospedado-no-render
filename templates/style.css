@@ -1,9 +1,18 @@
 .container {
   display: flex;
-  align-items: center; /* Alinha o texto verticalmente ao centro da imagem */
-  gap: 15px; /* Cria um espaço entre a imagem e o texto */
+  align-items: flex-start; /* Alinha o texto no topo da imagem */
+  gap: 20px; /* Espaço entre a imagem e o texto */
+  flex-wrap: wrap; /* Permite quebrar linha em telas pequenas */
 }
 
-.container img {
-  width: 150px; /* Define a largura da sua imagem */
+.minha-imagem {
+  width: 150px; /* Defina o tamanho desejado da imagem */
+  height: auto;
+  flex-shrink: 0; /* Impede que a imagem encolha no flexbox */
 }
+
+.texto-container {
+  flex: 1; /* O texto ocupa o restante do espaço disponível */
+  min-width: 250px; /* Força a quebra para baixo se a tela for menor que isso */
+}
+
