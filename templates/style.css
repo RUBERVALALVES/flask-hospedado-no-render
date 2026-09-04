@@ -1,0 +1,9 @@
+.container {
+  display: flex;
+  align-items: center; /* Alinha o texto verticalmente ao centro da imagem */
+  gap: 15px; /* Cria um espaço entre a imagem e o texto */
+}
+
+.container img {
+  width: 150px; /* Define a largura da sua imagem */
+}
