@@ -4,7 +4,7 @@ from PIL import Image
 import os
 from ai_edge_litert.interpreter import Interpreter
 
-interpreter = Interpreter(model_path="modelo_otimizado2.tflite")
+interpreter = Interpreter(model_path="modelo_otimizado.tflite")
 #https://github.com/pradeep583/Disease_prediction/blob/main/main.py
 
 interpreter.allocate_tensors()
@@ -12,7 +12,7 @@ interpreter.allocate_tensors()
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 
-classes = ['Coccidiosis', 'Newcastle', 'Outros','Sadia', 'Salmonella']
+classes = ['Coccidiosis', 'Newcastle', 'Sadia', 'Salmonella']
 
 def getPrediction(filename):
     SIZE = 180
@@ -49,8 +49,8 @@ def getPrediction(filename):
     exp_preds = np.exp(output_data - np.max(output_data))
     probabilities = exp_preds / np.sum(exp_preds)
 
-   # predicted_index = int(np.argmax(probabilities))
-   # confidence = float(probabilities[predicted_index]*100)
+    predicted_index = int(np.argmax(probabilities))
+    confidence = float(probabilities[predicted_index]*100)
 
     print(f"Predições/Probabilidades: {probabilities}") # Para você depurar no terminal
     print(f"Classe detectada: {classes[predicted_index]} com confiança {confidence:.2f}")
@@ -59,7 +59,6 @@ def getPrediction(filename):
     entropy = -np.sum(probabilities * np.log(probabilities + 1e-10))
     max_entropy = np.log(len(classes))  # Maior incerteza possível
 
-    if confidence < 75 or entropy / max_entropy > 0.6:
+    if confidence < 75 or entropy / max_entropy > 0.6 or img_array.std() <15:
         return "Imagem Invalida ou pouco confiança"
     return classes[predicted_index],  confidence, probabilities, entropy, max_entropy
-
