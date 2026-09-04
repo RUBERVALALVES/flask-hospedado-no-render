@@ -93,13 +93,11 @@
 <body>
   <div class="container">
     <h2>Doenças em Frango</h2>
-
+  <img src="{{ url_for('static', filename='frango2.jpg') }}" alt="FRANGAO" style="max-width: 30%; height: auto;"> 
+     <p>Este texto vai ficar posicionado ao lado da imagem carregada.</p>
+    
     <h4>Selecione uma imagem de fezes de Frango para Diagnostico</h4>
 
-    <div class="container">
-     <img src="{{ url_for('static', filename='frango2.jpg') }}" alt="FRANGAO" style="max-width: 30%; height: auto;"> 
-     <p>Este texto vai ficar posicionado ao lado da imagem carregada.</p>
-     </div>
     
       <form method="post" action="/" enctype="multipart/form-data">
       <div class="file-box">
