@@ -61,6 +61,6 @@ def getPrediction(filename):
 
     confianca =  f"{confidence:.2f}"
 
-    if confidence < 75 or entropy / max_entropy > 0.6 or class_names[predicted_index] == "Outros":
+    if confidence < 75 or entropy / max_entropy > 0.6 or classes[predicted_index] == "Outros":
         return "Tipo de Imagem Invalida ou pouca confiança"
     return classes[predicted_index],  confianca
