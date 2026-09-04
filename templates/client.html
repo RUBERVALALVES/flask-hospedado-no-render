@@ -91,8 +91,6 @@
 </head>
 
 <body>
-  <div class="container">
-    <h2>Doenças em Frango</h2>
 <table>
   <tr>
   <td></td><img src="{{ url_for('static', filename='frango2.jpg') }}" alt="FRANGAO" style="max-width: 30%; height: auto;"> 
@@ -103,10 +101,11 @@ Phasellus bibendum aliquet erat, ut ornare purus malesuada et.</td>
   </tr>
  
 </table>
-    
+  
+  <div class="container">
+    <h2>Doenças em Frango</h2>
       
     <h4>Selecione uma imagem de fezes de Frango para Diagnostico</h4>
-
     
       <form method="post" action="/" enctype="multipart/form-data">
       <div class="file-box">
