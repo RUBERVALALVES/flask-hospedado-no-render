@@ -59,8 +59,8 @@ def getPrediction(filename):
     entropy = -np.sum(probabilities * np.log(probabilities + 1e-10))
     max_entropy = np.log(len(classes))  # Maior incerteza possível
 
-    confidence =  f"{confidence:.2f}"
+    confianca =  f"{confidence:.2f}"
 
     if confidence < 75 or entropy / max_entropy > 0.6:
         return "Imagem Invalida ou pouco confiança"
-    return classes[predicted_index],  confidence
+    return classes[predicted_index],  confianca
