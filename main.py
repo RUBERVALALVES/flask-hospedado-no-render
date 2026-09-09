@@ -4,7 +4,7 @@ from PIL import Image
 import os
 from ai_edge_litert.interpreter import Interpreter
 
-interpreter = Interpreter(model_path="modelo_otimizado2.tflite")
+interpreter = Interpreter(model_path="modelo_otimizado224.tflite")
 #https://github.com/pradeep583/Disease_prediction/blob/main/main.py
 
 interpreter.allocate_tensors()
