@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <!-- Meta viewport obrigatória para mobile -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css"
   <meta charset="UTF-8">
   <title>Previsão Doenças em Aves</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       background-color: #f7f7f7;
       font-family: Arial, sans-serif;
@@ -14,11 +20,13 @@
     }
 
     .container {
+      width: 100;
       max-width: 600px;
-      margin: 40px auto;
+      margin: 20px auto;
       padding: 20px;
       background-color: #fff;
       border: 1px solid #ddd;
+      border-radius: 8px;
     }
 
     h2 {
@@ -39,26 +47,30 @@
     }
 
     .file-box {
-      display: inline-block;
-      padding: 8px 12px;
+     display: block;
+      width: 100%;
+      padding: 12px;
       border: 1px solid #ccc;
       border-radius: 6px;
       background-color: #fff;
+      overflow: hidden; /* E
     }
 
     input[type="file"] {
-      border: none;
-      outline: none;
+    width: 100%;
+      max-width: 100%;
     }
 
-    input[type="submit"] {
+   input[type="submit"] {
+      width: 100%; /* Facilita o toque no celular */
       margin-top: 15px;
-      padding: 8px 16px;
+      padding: 12px 16px;
       background-color: #2a9df4;
       color: #fff;
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      font-size: 16px;
     }
 
     .diagnosis-section {
@@ -75,8 +87,9 @@
     }
 
     .diagnosis-image {
-      display: block;
+    display: block;
       margin: 10px auto;
+      width: 100%; /* Adapta a imagem ao container */
       max-width: 300px;
       height: auto;
     }
@@ -87,6 +100,22 @@
       font-size: 13px;
       color: #999;
     }
+@media (max-width: 480px) {
+      .container {
+        padding: 15px;
+        margin: 10px auto;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+
+      h4 {
+        font-size: 14px;
+      }
+}
+
+    
   </style>
 </head>
 
