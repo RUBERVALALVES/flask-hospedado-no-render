@@ -27,6 +27,9 @@ def cleanup_static_folder():
 def index():
     return render_template('client.html')
 
+
+
+
 @app.route('/', methods=['POST'])
 def submit_file():
     if 'file' not in request.files:
@@ -34,7 +37,16 @@ def submit_file():
         return redirect(request.url)
 
     file = request.files['file']
+    
+    file_bytes = request.data
+    if file_bytes:
+        file_path = os.path.join(UPLOAD_FOLDER, 'imagem_recebida.jpg')
+        with open(file_path, 'wb') as f:
+            f.write(file_bytes)
+        return "Arquivo recebido com sucesso!", 200
+    return "Nenhum arquivo enviado", 400
 
+    
     if file.filename == '':
         flash('No file selected for uploading')
         return redirect(request.url)
