@@ -37,6 +37,8 @@ def submit_file():
         return redirect(request.url)
 
     file = request.files['file']
+    if file.filename == '':
+        return jsonify({'status': 'error', 'message': 'Nenhum arquivo selecionado'}), 400
     
     file_bytes = request.data
     if file_bytes:
