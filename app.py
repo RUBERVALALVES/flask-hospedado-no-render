@@ -1,34 +1,68 @@
-from flask import Flask, request, jsonify
+from flask import Flask, render_template, request, redirect, flash
 from werkzeug.utils import secure_filename
 from main import getPrediction
 import os
 
-app = Flask(__name__)
 UPLOAD_FOLDER = 'static'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+app = Flask(__name__)
+app.secret_key = 'secret key'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
+def cleanup_static_folder():
+    for filename in os.listdir(UPLOAD_FOLDER):
+        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        try:
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+        except Exception as e:
+            print(f"Warning: Failed to delete {file_path} — {e}")
+
+@app.route('/')
+def index():
+    return render_template('client.html')
+
 @app.route('/', methods=['POST'])
 def submit_file():
-    # Suporte para envio direto via PostFile (dados brutos)
-    if request.data:
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], 'temp_image.jpg')
-        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-        with open(file_path, 'wb') as f:
-            f.write(request.data)
-        
-        # Executa a predição da foto enviada
-        result = getPrediction('temp_image.jpg')
-        
-        if result == "Invalid":
-            return jsonify({'status': 'error', 'message': 'Por favor, envie uma foto válida de fezes do frango'}), 200
-            
-        return jsonify({'status': 'success', 'prediction': result}), 200
+    if 'file' not in request.files:
+        flash('No file part')
+        return redirect(request.url)
 
-    return jsonify({'status': 'error', 'message': 'Nenhum arquivo enviado'}), 400
+    file = request.files['file']
+
+    if file.filename == '':
+        flash('No file selected for uploading')
+        return redirect(request.url)
+
+    if file and allowed_file(file.filename):
+        # Delete any existing file in static/
+        cleanup_static_folder()
+
+        # Save new file
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+        file.save(file_path)
+
+        result = getPrediction(filename)
+
+        if result == "Invalid":
+            return render_template('client.html', error_message="Por favor, envie uma foto de fezes do Frango")
+        else:
+            return render_template('client.html', prediction=result, image='/' + file_path)
+
+
+       
+
+    else:
+        flash('Allowed file types are png, jpg, jpeg')
+        return redirect(request.url)
+
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
