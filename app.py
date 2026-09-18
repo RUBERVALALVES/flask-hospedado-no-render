@@ -1,84 +1,51 @@
-import base64
 import os
-from flask import Flask, flash, redirect, render_template, request
-from werkzeug.utils import secure_filename
-from main import getPrediction
-
-UPLOAD_FOLDER = 'static'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+import base64
+import io
+from flask import Flask, request, jsonify
+from PIL import Image
+# import cv2  # Caso use OpenCV
+# import numpy as np
 
 app = Flask(__name__)
-app.secret_key = 'secret key'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-def cleanup_static_folder():
-    for filename in os.listdir(UPLOAD_FOLDER):
-        file_path = os.path.join(UPLOAD_FOLDER, filename)
-        try:
-            if os.path.isfile(file_path):
-                os.remove(file_path)
-        except Exception as e:
-            print(f"Warning: Failed to delete {file_path} — {e}")
+# Função fictícia para simular sua IA/Modelo
+def predizer_imagem(image):
+    # Aqui entra o seu modelo (ex: model.predict)
+    # Exemplo simples usando a biblioteca PIL:
+    largura, altura = image.size
+    return f"Imagem processada com sucesso. Resolução: {largura}x{altura}"
 
-@app.route('/', methods=['POST'])
-def submit_file():
-    # Verifica se os dados vieram no formato JSON (Base64 do App Inventor)
-    if request.is_json:
-        data = request.get_json()
-        base64_string = data.get('image')
-
-        if not base64_string:
-            return {"error": "Nenhuma imagem enviada"}, 400
-
-        # Remove o cabeçalho data URI se o App Inventor enviar (ex: "data:image/jpeg;base64,")
-        if ',' in base64_string:
-            base64_string = base64_string.split(',')[1]
-
-        try:
-            # Decodifica a string Base64 para bytes
-            image_bytes = base64.b64decode(base64_string)
-            
-            cleanup_static_folder()
-            
-            filename = 'uploaded_image.jpg'
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-
-            # Salva o arquivo de imagem no servidor
-            with open(file_path, 'wb') as f:
-                f.write(image_bytes)
-
-            result = getPrediction(filename)
-
-            if result == "Invalid":
-                return {"error": "Por favor, envie uma foto de fezes do Frango"}, 400
-
-            # Retorna o resultado em JSON para o App Inventor
-            return {
-                "prediction": result,
-                "image": '/' + file_path
-            }, 200
-
-        except Exception as e:
-            return {"error": f"Erro ao processar imagem: {str(e)}"}, 500
-
-    # Mantém o suporte antigo para requisições multipart/form-data via HTML
-    elif 'file' in request.files:
-        file = request.files['file']
-        if file.filename == '':
-            flash('No file selected for uploading')
-            return redirect(request.url)
-            
-        cleanup_static_folder()
-        filename = secure_filename(file.filename)
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-        file.save(file_path)
+@app.route('/predict', methods=['POST'])
+def predict():
+    try:
+        dados = request.get_json()
+        if not dados or 'imagem_base64' not in dados:
+            return jsonify({'erro': 'Nenhuma imagem enviada'}), 400
         
-        result = getPrediction(filename)
-        if result == "Invalid":
-            return render_template('client.html', error_message="Por favor, envie uma foto de fezes do Frango")
-        else:
-            return render_template('client.html', prediction=result, image='/' + file_path)
+        # Remove cabeçalhos de dados se existirem (ex: "data:image/jpeg;base64,")
+        img_data = dados['imagem_base64']
+        if "," in img_data:
+            img_data = img_data.split(",")[1]
 
-    return {"error": "Formato de requisição não suportado"}, 400
+        # Decodifica a string Base64 para Bytes
+        conteudo_imagem = base64.b64decode(img_data)
+        
+        # Converte para o formato PIL Image (útil para a maioria das IAs)
+        imagem = Image.open(io.BytesIO(conteudo_imagem))
+
+        # Se precisar converter para formato OpenCV (BGR):
+        # imagem_np = np.frombuffer(conteudo_imagem, dtype=np.uint8)
+        # img_cv2 = cv2.imdecode(imagem_np, cv2.IMREAD_COLOR)
+
+        # Executa a predição
+        resultado = predizer_imagem(imagem)
+
+        return jsonify({'status': 'sucesso', 'predicao': resultado}), 200
+
+    except Exception as e:
+        return jsonify({'erro': str(e)}), 500
+
+if __name__ == '__main__':
+    # O Render configura a porta automaticamente via variável de ambiente
+    porta = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=porta)
