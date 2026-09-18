@@ -1,51 +1,69 @@
+from flask import Flask, render_template, request, redirect, flash
+from werkzeug.utils import secure_filename
+from main import getPrediction
 import os
-import base64
-import io
-from flask import Flask, request, jsonify
-from PIL import Image
-# import cv2  # Caso use OpenCV
-# import numpy as np
+
+UPLOAD_FOLDER = 'static'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 app = Flask(__name__)
+app.secret_key = 'secret key'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Função fictícia para simular sua IA/Modelo
-def predizer_imagem(image):
-    # Aqui entra o seu modelo (ex: model.predict)
-    # Exemplo simples usando a biblioteca PIL:
-    largura, altura = image.size
-    return f"Imagem processada com sucesso. Resolução: {largura}x{altura}"
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    try:
-        dados = request.get_json()
-        if not dados or 'imagem_base64' not in dados:
-            return jsonify({'erro': 'Nenhuma imagem enviada'}), 400
-        
-        # Remove cabeçalhos de dados se existirem (ex: "data:image/jpeg;base64,")
-        img_data = dados['imagem_base64']
-        if "," in img_data:
-            img_data = img_data.split(",")[1]
 
-        # Decodifica a string Base64 para Bytes
-        conteudo_imagem = base64.b64decode(img_data)
-        
-        # Converte para o formato PIL Image (útil para a maioria das IAs)
-        imagem = Image.open(io.BytesIO(conteudo_imagem))
+def cleanup_static_folder():
+    for filename in os.listdir(UPLOAD_FOLDER):
+        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        try:
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+        except Exception as e:
+            print(f"Warning: Failed to delete {file_path} — {e}")
 
-        # Se precisar converter para formato OpenCV (BGR):
-        # imagem_np = np.frombuffer(conteudo_imagem, dtype=np.uint8)
-        # img_cv2 = cv2.imdecode(imagem_np, cv2.IMREAD_COLOR)
+@app.route('/')
+def index():
+    return render_template('client.html')
 
-        # Executa a predição
-        resultado = predizer_imagem(imagem)
+@app.route('/', methods=['POST'])
+def submit_file():
+    if 'file' not in request.files:
+        flash('No file part')
+        return redirect(request.url)
 
-        return jsonify({'status': 'sucesso', 'predicao': resultado}), 200
+    file = request.files['file']
 
-    except Exception as e:
-        return jsonify({'erro': str(e)}), 500
+    if file.filename == '':
+        flash('No file selected for uploading')
+        return redirect(request.url)
+
+    if file and allowed_file(file.filename):
+        # Delete any existing file in static/
+        cleanup_static_folder()
+
+        # Save new file
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+        file.save(file_path)
+
+        result = getPrediction(filename)
+
+        if result == "Invalid":
+            return render_template('client.html', error_message="Por favor, envie uma foto de fezes do Frango")
+        else:
+            return render_template('client.html', prediction=result, image='/' + file_path)
+
+
+       
+
+    else:
+        flash('Allowed file types are png, jpg, jpeg')
+        return redirect(request.url)
+
 
 if __name__ == '__main__':
-    # O Render configura a porta automaticamente via variável de ambiente
-    porta = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=porta)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
