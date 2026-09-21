@@ -11,6 +11,7 @@ def predict():
     try:
         base64_string = request.form.get('image')
 
+        print('Primeiros 50 caracteres recebidos:', base64_string[:50] if base64_string else 'VAZIO')
         if not base64_string:
             return jsonify({'erro': 'Nenhum dado enviado na chave image'}), 400
 
