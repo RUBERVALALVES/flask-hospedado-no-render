@@ -1,39 +1,51 @@
 import base64
 import io
-import re
+from flask import Flask, request, jsonify
 from PIL import Image
-from flask import Flask, request, jsonify  # Certifique-se de incluir o jsonify aqui
+import numpy as np
 
+app = Flask(__name__)
 
-# ... dentro da rota /predict ...
-
-# 1. Obter os dados (funciona para Form Data ou JSON)
-img_base64 = request.form.get('image') or (request.json and request.json.get('image'))
-
-if not img_base64:
-    return jsonify({'error': 'Nenhuma imagem foi recebida no campo "image"'}), 400
-
-# 2. Remover cabeçalho Data URI se presente (ex: data:image/png;base64,)
-if ',' in img_base64:
-    img_base64 = img_base64.split(',')[1]
-
-# 3. Tratar espaço substituído pelo Android (+) e quebras de linha
-img_base64 = img_base64.replace(' ', '+').replace('\n', '').replace('\r', '').strip()
-
-# 4. Ajustar Padding do Base64 se estiver incompleto
-missing_padding = len(img_base64) % 4
-if missing_padding:
-    img_base64 += '=' * (4 - missing_padding)
-
-try:
-    # 5. Decodificar bytes e abrir a imagem
-    img_bytes = base64.b64decode(img_base64)
-    image = Image.open(io.BytesIO(img_bytes))
+# Função de predição do modelo (substitua pela sua lógica/modelo treinado)
+def predict_image(img_pil):
+    # Exemplo: redimensionar e processar a imagem
+    img_resized = img_pil.resize((224, 224))
     
-    # Força o carregamento dos dados da imagem para validar a integridade
-    image.verify() 
-    # Recarrega a imagem para uso posterior (verify fecha o ponteiro do arquivo)
-    image = Image.open(io.BytesIO(img_bytes))
+    # --- Coloque a inferência do seu modelo aqui ---
+    # resultado = model.predict(...)
+    
+    return "Classe Exemplo", 0.95
 
-except Exception as decode_err:
-    return jsonify({'error': f"Erro na decodificação da imagem: {str(decode_err)}"}), 400
+@app.route('/predict', methods=['POST'])
+def predict():
+    try:
+        # Obtém o campo enviado pelo formulário HTML (application/x-www-form-urlencoded)
+        base64_data = request.form.get('image_base64')
+        
+        if not base64_data:
+            return jsonify({'error': 'Nenhuma imagem enviada'}), 400
+
+        # Remove o prefixo data URI se presente
+        if ',' in base64_data:
+            base64_data = base64_data.split(',')[1]
+
+        # Decodifica a string Base64 para bytes
+        img_bytes = base64.b64decode(base64_data)
+        
+        # Converte os bytes em uma imagem PIL
+        image = Image.open(io.BytesIO(img_bytes)).convert('RGB')
+
+        # Realiza a predição
+        label, confidence = predict_image(image)
+
+        return jsonify({
+            'success': True,
+            'prediction': label,
+            'confidence': float(confidence)
+        }), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
