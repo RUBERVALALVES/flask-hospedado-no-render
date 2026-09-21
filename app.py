@@ -17,15 +17,17 @@ def predict():
         # 2. Atribui a variável logo após a validação
         img_base64 = data['image']
 
-        if not img_base64:
-            return jsonify({'error': 'A string da imagem está vazia'}), 400
-
-        # 3. Remove o prefixo data URI se estiver presente
+        # Remove prefixo de data URI, quebras de linha e espaços
         if ',' in img_base64:
             img_base64 = img_base64.split(',')[1]
 
-        # 4. Limpa quebras de linha/espaços indesejados do App Inventor
         img_base64 = img_base64.replace('\n', '').replace('\r', '').strip()
+
+        img_bytes = base64.b64decode(img_base64)
+        image = Image.open(io.BytesIO(img_bytes))
+        
+        if not img_base64:
+            return jsonify({'error': 'A string da imagem está vazia'}), 400
 
         # 5. Decodifica e carrega a imagem
         img_bytes = base64.b64decode(img_base64)
