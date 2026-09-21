@@ -9,37 +9,33 @@ app = Flask(__name__)
 def predict():
     try:
         data = request.get_json()
+
+        # 1. Valida se o JSON foi recebido e se contém a chave 'image'
         if not data or 'image' not in data:
-            return jsonify({'error': 'Nenhuma imagem enviada'}), 400
-            
-        print("Tamanho do Base64 recebido:", len(img_base64))
-        print("Primeiros 50 caracteres:", img_base64[:50])
-        
+            return jsonify({'error': 'Nenhuma imagem enviada no campo "image"'}), 400
+
+        # 2. Atribui a variável logo após a validação
         img_base64 = data['image']
 
-        # 1. Remove cabeçalho de data URL se existir (ex: data:image/jpeg;base64,)
+        if not img_base64:
+            return jsonify({'error': 'A string da imagem está vazia'}), 400
+
+        # 3. Remove o prefixo data URI se estiver presente
         if ',' in img_base64:
             img_base64 = img_base64.split(',')[1]
 
-        # 2. Remove quebras de linha e espaços que o KIO4_Base64 pode gerar
+        # 4. Limpa quebras de linha/espaços indesejados do App Inventor
         img_base64 = img_base64.replace('\n', '').replace('\r', '').strip()
 
-        # 3. Decodifica a string Base64
+        # 5. Decodifica e carrega a imagem
         img_bytes = base64.b64decode(img_base64)
-
-        # 4. Abre a imagem usando PIL
-        image = Image.open(io.BytesIO(img_bytes))
-        image.verify() # Valida se é realmente uma imagem válida
-        
-        # Recarrega a imagem para uso no modelo após a verificação
         image = Image.open(io.BytesIO(img_bytes))
 
         # --- SEU MODELO DE PREDIÇÃO AQUI ---
         # resultado = modelo.predict(image)
-        resultado = "Imagem processada com sucesso!"
+        resultado = "Predição realizada com sucesso!"
 
         return jsonify({'prediction': resultado, 'status': 'sucesso'}), 200
 
     except Exception as e:
-        # Retorna o erro detalhado para facilitar o diagnóstico
-        return jsonify({'error': f"Erro ao processar imagem: {str(e)}"}), 500
+        return jsonify({'error': f"Erro interno: {str(e)}"}), 500
