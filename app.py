@@ -2,6 +2,8 @@ import base64
 import io
 import re
 from PIL import Image
+from flask import Flask, request, jsonify  # Certifique-se de incluir o jsonify aqui
+
 
 # ... dentro da rota /predict ...
 
