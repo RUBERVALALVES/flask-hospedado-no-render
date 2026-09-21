@@ -11,7 +11,10 @@ def predict():
         data = request.get_json()
         if not data or 'image' not in data:
             return jsonify({'error': 'Nenhuma imagem enviada'}), 400
-
+            
+        print("Tamanho do Base64 recebido:", len(img_base64))
+        print("Primeiros 50 caracteres:", img_base64[:50])
+        
         img_base64 = data['image']
 
         # 1. Remove cabeçalho de data URL se existir (ex: data:image/jpeg;base64,)
