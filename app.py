@@ -9,34 +9,38 @@ app = Flask(__name__)
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
+        # 1. Captura a string do formulário 'image'
         base64_string = request.form.get('image')
 
-        print('Primeiros 50 caracteres recebidos:', base64_string[:50] if base64_string else 'VAZIO')
         if not base64_string:
-            return jsonify({'erro': 'Nenhum dado enviado na chave image'}), 400
+            return jsonify({'erro': 'Nenhuma imagem recebida'}), 400
 
-        # Fix 1: Se a string contiver 'data:image/jpeg;base64,...', pega só o que vem depois da vírgula
+        # Remove prefixos do tipo data:image/jpeg;base64,
         if ',' in base64_string:
             base64_string = base64_string.split(',')[1]
 
-        # Fix 2: Remove quebras de linha ou espaços que possam ter vindo na requisição
+        # CORREÇÃO 1: Corrige espaços trocados pelo envio na URL
         base64_string = base64_string.strip().replace(' ', '+')
 
-        # Converte a string limpa para Bytes
-        img_bytes = base64.b64decode(base64_string)
+        # CORREÇÃO 2: Ajusta o PADDING faltando (adiciona '=' até o tamanho ser múltiplo de 4)
+        missing_padding = len(base64_string) % 4
+        if missing_padding:
+            base64_string += '=' * (4 - missing_padding)
 
-        # Abre a imagem com PIL
+        # 2. Decodifica os bytes e abre com a PIL
+        img_bytes = base64.b64decode(base64_string)
         img = Image.open(io.BytesIO(img_bytes)).convert('RGB')
 
-        # --- Lógica do seu modelo ---
+        # -------------------------------------------------------------
+        # 3. Lógica do seu modelo de predição
         # resultado = modelo.predict(img)
+        # -------------------------------------------------------------
 
         return (
-            jsonify({'status': 'sucesso', 'mensagem': 'Imagem identificada!'}),
+            jsonify({'status': 'sucesso', 'mensagem': 'Imagem decodificada!'}),
             200,
         )
 
     except Exception as e:
-        # Exibe o erro exato no log do Render
-        print(f'Erro no processamento: {str(e)}')
+        print(f'Erro de processamento: {str(e)}')
         return jsonify({'erro': str(e)}), 500
