@@ -94,6 +94,20 @@ def predict():
         img_bytes = base64.b64decode(base64_string)
         img = Image.open(io.BytesIO(img_bytes)).convert('RGB')
 
+        # 3. Limpa a pasta static (se desejar manter o comportamento da outra rota)
+        cleanup_static_folder()
+
+        # 4. Gera um nome único para o arquivo e salva em static/
+        filename = f"upload_{uuid.uuid4().hex[:8]}.jpg"
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True) 
+
+        # Salva a imagem usando a biblioteca Pillow
+        img.save(file_path, 'JPEG')
+
+        # 5. Executa a predição passando o arquivo salvo
+        result = getPrediction(filename)
+
         # -------------------------------------------------------------
         # 3. Coloque aqui a chamada para o seu modelo de predição
 
@@ -107,8 +121,12 @@ def predict():
         #resultado = getPrediction(filename)
         # -------------------------------------------------------------
 
-        return jsonify({'status': 'sucesso', 'resultado': 'OK'}), 200
-
+        return jsonify({
+            'status': 'sucesso',
+            'resultado': result,
+            'imagem_url': f'/{file_path}'
+        }), 200
+     
     except Exception as e:
         print(f'Erro no processamento: {str(e)}')
         return jsonify({'erro': str(e)}), 500
