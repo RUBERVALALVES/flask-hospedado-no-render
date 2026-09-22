@@ -1,5 +1,6 @@
 import base64
 import io
+import uuid
 from PIL import Image
 from flask import Flask, render_template, request, jsonify, redirect, flash
 from werkzeug.utils import secure_filename
