@@ -19,6 +19,32 @@
       padding: 0;
     }
 
+/* Container que alinha as imagens lado a lado */
+.image-container {
+  display: flex;
+  justify-content: center; /* Centraliza as imagens */
+  align-items: center;     /* Alinha verticalmente pelo centro */
+  gap: 15px;               /* Espaçamento entre as duas imagens */
+  flex-wrap: wrap;         /* Permite que as imagens dobrem de linha no celular */
+  margin: 15px 0;
+}
+
+/* Regra responsiva para cada imagem */
+.responsive-img {
+  width: 100%;
+  max-width: 150px;        /* Ajuste este tamanho conforme preferir */
+  height: auto;            /* Mantém a proporção */
+  border-radius: 8px;      /* Opcional: cantos arredondados */
+}
+
+/* Ajuste específico para telas de celular pequenas */
+@media (max-width: 480px) {
+  .responsive-img {
+    max-width: 45%;        /* Permite que fiquem lado a lado mesmo em telas menores */
+  }
+}
+
+    
     .container {
       width: 100;
       max-width: 600px;
@@ -131,10 +157,14 @@
 <body>
   
   <div class="container">
-    <h2>Doenças em Frango</h2>
-  <!--  <img src="{{ url_for('static', filename='logoiatsvtec.png') }}" alt="Ilustração Frango" class="header-image"> -->      
+    <h2>Diagnostico da Saúde do Frango</h2>
+  
     <h4>Selecione uma imagem de fezes de Frango para Diagnostico</h4>
-     <img src="{{ url_for('static', filename='logoiatsvtec.png') }}" alt="FRANGAO" style="max-width: 30%; height: auto;"> 
+    <div class="image-container">
+  <img src="{{ url_for('static', filename='logoiatsvtec.png') }}" alt="Logo 1" class="responsive-img">
+  <img src="{{ url_for('static', filename='frangosoescrito.png') }}" alt="Logo 2" class="responsive-img">
+</div>
+ <!--    <img src="{{ url_for('static', filename='logoiatsvtec.png') }}" alt="FRANGAO" style="max-width: 30%; height: auto;"> -->
       <form method="post" action="/" enctype="multipart/form-data">
       <div class="file-box">
         <input type="file" name="file" required>
