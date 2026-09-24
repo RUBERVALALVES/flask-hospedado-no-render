@@ -74,7 +74,7 @@ def getPrediction(filename):
     if confidence < 85.0 or normalized_entropy > 0.50 or margin < 0.35:
         return "Tipo de Imagem Invalida ou pouca confiança", confianca
 
-    return classes[predicted_index], confianca
+    return classes[predicted_index], confianca, probabilities
 
   
     #confianca =  f"{confidence:.2f}"
