@@ -96,9 +96,9 @@ def extrair_texto_original(arr, casas=2):
     #max_entropy = np.log(len(classes))  # Maior incerteza possível
     confianca =  f"{confidence:.2f}%"
     if confidence < 85.0 or normalized_entropy > 0.50:
-        return "Tipo de Imagem Invalida ou pouca confiança", confianca, probabilities, apenas_digitos, soma
+        return "Tipo de Imagem Invalida ou pouca confiança", confianca, probabilities, apenas_digitos
 
-    return classes[predicted_index], confianca, probabilities, apenas_digitos, soma
+    return classes[predicted_index], confianca, probabilities, apenas_digitos
 
   
     #confianca =  f"{confidence:.2f}"
