@@ -59,8 +59,12 @@ def getPrediction(filename):
     top2_prob = sorted_probs[1] 
     top3_prob = sorted_probs[2] 
     top4_prob = sorted_probs[3] 
+    apenas_digitos = [str(x).split('e')[0] for x in probabilities]
 
-    apenas_digitos = probabilities 
+    # Converte cada elemento em string e remove o 'e' e o que vem depois
+    #apenas_digitos = [str(x).split('e')[0] for x in arr]
+  
+    #apenas_digitos = str(arr[0])  # Gera "9.9884892e-01"
 
     # Margem de diferença entre a 1ª e a 2ª maior probabilidade
     margin = top1_prob + top2_prob + top3_prob + top4_prob
