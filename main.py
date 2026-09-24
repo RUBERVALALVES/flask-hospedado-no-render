@@ -60,6 +60,8 @@ def getPrediction(filename):
     top3_prob = sorted_probs[2] if len(sorted_probs) > 1 else 0.0
     top4_prob = sorted_probs[3] if len(sorted_probs) > 1 else 0.0
 
+    apenas_digitos = f"{top1_prob:.1e}".split('e')[0]
+
     # Margem de diferença entre a 1ª e a 2ª maior probabilidade
     margin = top1_prob + top2_prob + top3_prob + top4_prob
 
@@ -74,9 +76,9 @@ def getPrediction(filename):
     #max_entropy = np.log(len(classes))  # Maior incerteza possível
     confianca =  f"{confidence:.2f}%"
     if confidence < 85.0 or normalized_entropy > 0.50 or margin < 19:
-        return "Tipo de Imagem Invalida ou pouca confiança", confianca, probabilities, margin
+        return "Tipo de Imagem Invalida ou pouca confiança", confianca, probabilities, margin, apenas_digitos
 
-    return classes[predicted_index], confianca, probabilities, margin
+    return classes[predicted_index], confianca, probabilities, margin, , apenas_digitos
 
   
     #confianca =  f"{confidence:.2f}"
