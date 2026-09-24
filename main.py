@@ -60,7 +60,7 @@ def getPrediction(filename):
     top3_prob = sorted_probs[2] 
     top4_prob = sorted_probs[3] 
 
-    apenas_digitos = np.format_float_positional(probabilities[0], trim='-') 
+    apenas_digitos = probabilities 
 
     # Margem de diferença entre a 1ª e a 2ª maior probabilidade
     margin = top1_prob + top2_prob + top3_prob + top4_prob
