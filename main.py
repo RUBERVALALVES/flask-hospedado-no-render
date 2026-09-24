@@ -55,10 +55,10 @@ def getPrediction(filename):
     print(f"Predições/Probabilidades: {probabilities}") # Para você depurar no terminal
     print(f"Classe detectada: {classes[predicted_index]} com confiança {confidence:.2f}")
     sorted_probs = np.sort(probabilities)[::-1]
-    top1_prob = sorted_probs[0] if len(sorted_probs) > 1 else 0.0
-    top2_prob = sorted_probs[1] if len(sorted_probs) > 1 else 0.0
-    top3_prob = sorted_probs[2] if len(sorted_probs) > 1 else 0.0
-    top4_prob = sorted_probs[3] if len(sorted_probs) > 1 else 0.0
+    top1_prob = sorted_probs[0] 
+    top2_prob = sorted_probs[1] 
+    top3_prob = sorted_probs[2] 
+    top4_prob = sorted_probs[3] 
 
     apenas_digitos = f"{sorted_probs[0]:.1e}".split('e')[0]
 
