@@ -31,16 +31,17 @@
 
 /* Regra responsiva para cada imagem */
 .responsive-img {
-  width: 100%;
-  max-width: 150px;        /* Ajuste este tamanho conforme preferir */
-  height: auto;            /* Mantém a proporção */
-  border-radius: 8px;      /* Opcional: cantos arredondados */
+  width: 120px;
+  object-fit: contain;        /* Ajuste este tamanho conforme preferir */
+  height: 60px;            /* Mantém a proporção */
+  border-radius: 6px;      /* Opcional: cantos arredondados */
 }
 
 /* Ajuste específico para telas de celular pequenas */
 @media (max-width: 480px) {
   .responsive-img {
-    max-width: 45%;        /* Permite que fiquem lado a lado mesmo em telas menores */
+    width: 100px;
+    height: 50px;/* Permite que fiquem lado a lado mesmo em telas menores */
   }
 }
 
@@ -161,16 +162,18 @@
   
     <h4>Selecione uma imagem de fezes de Frango para Diagnostico</h4>
     <div class="image-container">
-  <img src="{{ url_for('static', filename='logoiatsvtec.png') }}" alt="Logo 1" class="responsive-img">
-  <img src="{{ url_for('static', filename='frangosoescrito.png') }}" alt="Logo 2" class="responsive-img">
-</div>
+        <img src="{{ url_for('static', filename='logoiatsvtec.png') }}" alt="Logo 1" class="responsive-img">
+        <img src="{{ url_for('static', filename='frangosoescrito.png') }}" alt="Logo 2" class="responsive-img">
+    </div>
  <!--    <img src="{{ url_for('static', filename='logoiatsvtec.png') }}" alt="FRANGAO" style="max-width: 30%; height: auto;"> -->
       <form method="post" action="/" enctype="multipart/form-data">
       <div class="file-box">
         <input type="file" name="file" required>
       </div>
       <br>
-      <input type="submit" value="Enviar para Análise">
+      <h4>Dados Transformados em inteligência Real</h4>
+      <br>
+        <input type="submit" value="Enviar para Análise">
     </form>
 
     {% if error_message %}
