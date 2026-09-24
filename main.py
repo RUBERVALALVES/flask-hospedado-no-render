@@ -54,18 +54,11 @@ def getPrediction(filename):
 
     print(f"Predições/Probabilidades: {probabilities}") # Para você depurar no terminal
     print(f"Classe detectada: {classes[predicted_index]} com confiança {confidence:.2f}")
-    sorted_probs = np.sort(probabilities)[::-1]
-    top1_prob = sorted_probs[0] 
-    top2_prob = sorted_probs[1] 
-    top3_prob = sorted_probs[2] 
-    top4_prob = sorted_probs[3] 
-    #apenas_digitos = [str(x).split('e')[0] for x in probabilities]
-    # Formata cada probabilidade com 3 casas decimais sem notação científica
-    apenas_digitos = [f"{x:.3f}" for x in probabilities]
-    # Converte cada elemento em string e remove o 'e' e o que vem depois
-    #apenas_digitos = [str(x).split('e')[0] for x in arr]
-  
-    #apenas_digitos = str(arr[0])  # Gera "9.9884892e-01"
+ 
+   
+    #apenas_digitos = [f"{x:.3f}" for x in probabilities]
+    # Garante que NENHUM número fique em notação científica (converte todos para decimal puro)
+    apenas_digitos = [f"{float(x):.5f}" for x in probabilities]
 
     # Margem de diferença entre a 1ª e a 2ª maior probabilidade
     margin = top1_prob + top2_prob + top3_prob + top4_prob
