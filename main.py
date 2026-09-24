@@ -59,8 +59,9 @@ def getPrediction(filename):
     top2_prob = sorted_probs[1] 
     top3_prob = sorted_probs[2] 
     top4_prob = sorted_probs[3] 
-    apenas_digitos = [str(x).split('e')[0] for x in probabilities]
-
+    #apenas_digitos = [str(x).split('e')[0] for x in probabilities]
+    # Formata cada probabilidade com 3 casas decimais sem notação científica
+    apenas_digitos = [f"{x:.3f}" for x in probabilities]
     # Converte cada elemento em string e remove o 'e' e o que vem depois
     #apenas_digitos = [str(x).split('e')[0] for x in arr]
   
