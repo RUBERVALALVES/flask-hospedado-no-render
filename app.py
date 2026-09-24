@@ -109,19 +109,6 @@ def predict():
         # 5. Executa a predição passando o arquivo salvo
         result = getPrediction(filename)
 
-        # -------------------------------------------------------------
-        # 3. Coloque aqui a chamada para o seu modelo de predição
-
-        #result = getPrediction(img)
-
-        #if result == "Invalid":
-         #   return render_template('client.html', error_message="Por favor, envie uma foto de fezes do Frango")
-        #else:
-         #   return render_template('client.html', prediction=result, image='/' + file_path)
-        
-        #resultado = getPrediction(filename)
-        # -------------------------------------------------------------
-
         return jsonify({
             'status': 'sucesso',
             'resultado': result,
