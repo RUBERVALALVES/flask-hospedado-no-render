@@ -54,13 +54,31 @@ def getPrediction(filename):
 
     print(f"Predições/Probabilidades: {probabilities}") # Para você depurar no terminal
     print(f"Classe detectada: {classes[predicted_index]} com confiança {confidence:.2f}")
+    sorted_probs = np.sort(probabilities)[::-1]
+    top1_prob = sorted_probs[0]
+    top2_prob = sorted_probs[1] if len(sorted_probs) > 1 else 0.0
 
-    # Calcula a entropia da distribuição de probabilidade
+    # Margem de diferença entre a 1ª e a 2ª maior probabilidade
+    margin = top1_prob - top2_prob
+
+    # Calcula a entropia normalizada
     entropy = -np.sum(probabilities * np.log(probabilities + 1e-10))
-    max_entropy = np.log(len(classes))  # Maior incerteza possível
+    max_entropy = np.log(len(classes))
+    normalized_entropy = entropy / max_entropy
 
-    #confianca =  f"{confidence:.2f}"
+  
+    # Calcula a entropia da distribuição de probabilidade
+    #entropy = -np.sum(probabilities * np.log(probabilities + 1e-10))
+    #max_entropy = np.log(len(classes))  # Maior incerteza possível
     confianca =  f"{confidence:.2f}%"
-    if confidence < 80 or entropy / max_entropy > 0.6:
-        return "Tipo de Imagem Invalida ou pouca confiança"
-    return classes[predicted_index],  confianca
+    if confidence < 85.0 or normalized_entropy > 0.50 or margin < 0.35:
+        return "Tipo de Imagem Invalida ou pouca confiança", confianca
+
+    return classes[predicted_index], confianca
+
+  
+    #confianca =  f"{confidence:.2f}"
+    #confianca =  f"{confidence:.2f}%"
+    #if confidence < 80 or entropy / max_entropy > 0.6:
+    #    return "Tipo de Imagem Invalida ou pouca confiança"
+    #return classes[predicted_index],  confianca
