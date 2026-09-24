@@ -60,7 +60,7 @@ def getPrediction(filename):
     top3_prob = sorted_probs[2] 
     top4_prob = sorted_probs[3] 
 
-    apenas_digitos = f"{top1_prob:.10f}"[:3]
+    apenas_digitos = f"{sorted_probs[0]:.10f}"[:3]
 
     
 
