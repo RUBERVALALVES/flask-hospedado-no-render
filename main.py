@@ -22,7 +22,7 @@ def getPrediction(filename):
     img = Image.open(img_path).convert("RGB").resize((SIZE, SIZE))
     img_array = np.array(img, dtype=np.float32)
 
-    # Handle input dtype
+    # Handle input dtype 
     input_dtype = input_details[0]['dtype']
     if input_dtype == np.float32:
         img = np.asarray(img, dtype=np.float32) / 255.0
@@ -60,7 +60,7 @@ def getPrediction(filename):
     top3_prob = sorted_probs[2] 
     top4_prob = sorted_probs[3] 
 
-    apenas_digitos = probabilities[0]
+    apenas_digitos = probabilities[1]
     
 
     # Margem de diferença entre a 1ª e a 2ª maior probabilidade
