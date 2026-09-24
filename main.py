@@ -60,7 +60,9 @@ def getPrediction(filename):
     top3_prob = sorted_probs[2] 
     top4_prob = sorted_probs[3] 
 
-    apenas_digitos = f"{sorted_probs[0]:.1e}".split('e')[0]
+    apenas_digitos = f"{top1_prob:.10f}"[:3]
+
+    
 
     # Margem de diferença entre a 1ª e a 2ª maior probabilidade
     margin = top1_prob + top2_prob + top3_prob + top4_prob
