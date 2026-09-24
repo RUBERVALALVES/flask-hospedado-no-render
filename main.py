@@ -54,9 +54,34 @@ def getPrediction(filename):
 
     print(f"Predições/Probabilidades: {probabilities}") # Para você depurar no terminal
     print(f"Classe detectada: {classes[predicted_index]} com confiança {confidence:.2f}")
- 
+
+
+    # Função para extrair os dígitos sem arredondar para 1.00
+def extrair_texto_original(arr, casas=2):
+    resultado = []
+    for x in arr:
+        # 1. Pega a parte antes do 'e' (ex: "9.9999285")
+        parte_num = str(x).split('e')[0]
+        
+        # 2. Se for menor que 1 (ex: "0.99999285"), remove o "0." para pegar os números reais
+        if parte_num.startswith('0.'):
+            parte_num = parte_num[2:]
+            
+        # 3. Pega o primeiro dígito, põe um ponto, e pega os próximos dígitos
+        # Isso garante que "0.99999285" vire "9.99" em vez de arredondar para "1.00"
+        digitos = parte_num.replace('.', '')
+        texto = f"{digitos[0]}.{digitos[1:1+casas]}"
+        resultado.append(texto)
+        
+    return resultado
+
+    # Aplicando no seu array dinâmico:
+    apenas_digitos = extrair_texto_original(probabilities)
+
+
+  
    
-    apenas_digitos = [f"{x:.2e}".split('e')[0] for x in probabilities]
+    #apenas_digitos = [f"{x:.2e}".split('e')[0] for x in probabilities]
     #apenas_digitos1 = apenas_digitos[0]
     soma = sum(float(x) for x in apenas_digitos)  
 
