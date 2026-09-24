@@ -57,9 +57,9 @@ def getPrediction(filename):
  
    
     #apenas_digitos = [f"{x:.3f}" for x in probabilities]
-    # Garante que NENHUM número fique em notação científica (converte todos para decimal puro)
-    apenas_digitos = [f"{float(x):.5f}" for x in probabilities]
-
+    
+    #Converte o número original em string e pega os 4 primeiros caracteres (ex: "0.99" ou "9.98")
+    apenas_digitos = [str(x)[:4] for x in probabilities]
     # Margem de diferença entre a 1ª e a 2ª maior probabilidade
     #margin = top1_prob + top2_prob + top3_prob + top4_prob
 
