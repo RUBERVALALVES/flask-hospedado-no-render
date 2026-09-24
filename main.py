@@ -76,14 +76,14 @@ def extrair_texto_original(arr, casas=2):
     return resultado
 
     # Aplicando no seu array dinâmico:
-    apenas_digitos = extrair_texto_original(probabilities)
+    #apenas_digitos = extrair_texto_original(probabilities)
 
 
   
    
-    #apenas_digitos = [f"{x:.2e}".split('e')[0] for x in probabilities]
+    apenas_digitos = [f"{x:.2e}".split('e')[0] for x in probabilities]
     #apenas_digitos1 = apenas_digitos[0]
-    #soma = sum(float(x) for x in apenas_digitos)  
+    soma = sum(float(x) for x in apenas_digitos)  
     soma = 0
     # Calcula a entropia normalizada
     entropy = -np.sum(probabilities * np.log(probabilities + 1e-10))
@@ -96,9 +96,9 @@ def extrair_texto_original(arr, casas=2):
     #max_entropy = np.log(len(classes))  # Maior incerteza possível
     confianca =  f"{confidence:.2f}%"
     if confidence < 85.0 or normalized_entropy > 0.50:
-        return "Tipo de Imagem Invalida ou pouca confiança", confianca, probabilities, apenas_digitos
+        return "Tipo de Imagem Invalida ou pouca confiança", confianca, probabilities, apenas_digitos, soma
 
-    return classes[predicted_index], confianca, probabilities, apenas_digitos
+    return classes[predicted_index], confianca, probabilities, apenas_digitos, soma
 
   
     #confianca =  f"{confidence:.2f}"
