@@ -61,7 +61,7 @@ def getPrediction(filename):
     apenas_digitos = [f"{float(x):.5f}" for x in probabilities]
 
     # Margem de diferença entre a 1ª e a 2ª maior probabilidade
-    margin = top1_prob + top2_prob + top3_prob + top4_prob
+    #margin = top1_prob + top2_prob + top3_prob + top4_prob
 
     # Calcula a entropia normalizada
     entropy = -np.sum(probabilities * np.log(probabilities + 1e-10))
