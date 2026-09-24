@@ -57,8 +57,8 @@ def getPrediction(filename):
  
    
     apenas_digitos = [f"{x:.2e}".split('e')[0] for x in probabilities]
-    apenas_digitos1 = apenas_digitos[0]
-   
+    #apenas_digitos1 = apenas_digitos[0]
+    soma = sum(float(x) for x in apenas_digitos)  
 
     # Calcula a entropia normalizada
     entropy = -np.sum(probabilities * np.log(probabilities + 1e-10))
@@ -71,9 +71,9 @@ def getPrediction(filename):
     #max_entropy = np.log(len(classes))  # Maior incerteza possível
     confianca =  f"{confidence:.2f}%"
     if confidence < 85.0 or normalized_entropy > 0.50:
-        return "Tipo de Imagem Invalida ou pouca confiança", confianca, probabilities, apenas_digitos, apenas_digitos1
+        return "Tipo de Imagem Invalida ou pouca confiança", confianca, probabilities, apenas_digitos, soma
 
-    return classes[predicted_index], confianca, probabilities, apenas_digitos, apenas_digitos1
+    return classes[predicted_index], confianca, probabilities, apenas_digitos, soma
 
   
     #confianca =  f"{confidence:.2f}"
