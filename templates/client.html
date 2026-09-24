@@ -24,16 +24,18 @@
   display: flex;
   justify-content: center; /* Centraliza as imagens */
   align-items: center;     /* Alinha verticalmente pelo centro */
-  gap: 12px;               /* Espaçamento entre as duas imagens */
+  gap: 15px;               /* Espaçamento entre as duas imagens */
   margin: 15px 0;
+  width: 100%;
 }
 
 /* Regra responsiva para cada imagem */
 .responsive-img {
-  width: 48%;
+  width: 45%;
   height: auto; 
-  max-height: 90px;
-  object-fit: cover;        /* Ajuste este tamanho conforme preferir */
+  max-height: 100px;
+  max-width: 200px;
+  object-fit: contain;        /* Ajuste este tamanho conforme preferir */
 }
 
 
@@ -130,7 +132,7 @@
     }
 @media (max-width: 480px) {
       .container {
-     gap: 8px;
+     max-height: 70px;
             }
 
       h2 {
