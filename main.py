@@ -63,7 +63,7 @@ def getPrediction(filename):
     # Retorna "0" se o número for menor que 1; caso contrário, extrai a mantissa
     #apenas_digitos = ["0" if x < 1 else f"{x:.8e}".split("e")[0][:4] for x in probabilities]
     apenas_digitos = [f"{x:.8e}".split("e")[0][:4] for x in probabilities]
-    apenas_digitos2 = ["0" if x < 1 else f"{x:.8e}".split("e")[0][:4] for x in apenas_digitos]
+    apenas_digitos2 = ["0" if float(x) < 1 else x for x in apenas_digitos]
 
     # 2. Se você quiser apenas o primeiro valor (da classe prevista):
     #penas_digitos2 = apenas_digitos[predicted_index] 
