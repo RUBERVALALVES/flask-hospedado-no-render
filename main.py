@@ -90,10 +90,10 @@ def getPrediction(filename):
     # Para todos os outros casos de notação científica (ex: 9.988e-01 -> '9.9', 5.26e-08 -> '5.2', 4.62e-06 -> '4.6')
         return f"{x:.8e}".split("e")[0][:3]
 
-# Aplica em todo o array de probabilidades
+    # Aplica em todo o array de probabilidades
     apenas_digitos = [formatar_probabilidade(x) for x in probabilities]
 
-
+    soma = sum(float(x) for x in apenas_digitos)
     # 2. Se você quiser apenas o primeiro valor (da classe prevista):
     apenas_digitos2 = apenas_digitos[predicted_index] 
     # ou simplesmente apenas_digitos[0]
@@ -109,9 +109,9 @@ def getPrediction(filename):
     #max_entropy = np.log(len(classes))  # Maior incerteza possível
     confianca =  f"{confidence:.2f}%"
     if confidence < 85.0 or normalized_entropy > 0.50:
-        return "Tipo de Imagem Invalida ou pouca confiança", confianca, probabilities, apenas_digitos, apenas_digitos2
+        return "Tipo de Imagem Invalida ou pouca confiança", confianca, probabilities, apenas_digitos, soma
 
-    return classes[predicted_index], confianca, probabilities, apenas_digitos, apenas_digitos2
+    return classes[predicted_index], confianca, probabilities, apenas_digitos, soma
 
   
     #confianca =  f"{confidence:.2f}"
