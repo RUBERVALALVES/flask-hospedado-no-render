@@ -73,8 +73,12 @@ def getPrediction(filename):
             return f"{x:.1f}"
     
     # Trata decimais comuns como 0.04450481 -> '0.044' e 0.00534999 -> '0.005'
-        if 0.001 <= x < 0.1:
+        if 0.1 <= x < 0.95:
+            return f"{x:.1f}"
+     # Trata apenas decimais comuns entre 0.01 e 0.1 (ex: 0.04450481 -> '0.044')
+        if 0.01 <= x < 0.1:
             return f"{x:.3f}"
+      
     
     # Para valores em notação científica muito pequena com 3 dígitos (ex: 1.1464218e-03 -> '1.14')
         if 1e-4 <= x < 1e-2:
