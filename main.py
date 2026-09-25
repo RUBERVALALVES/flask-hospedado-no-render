@@ -76,8 +76,8 @@ def getPrediction(filename):
         if 0.1 <= x < 0.95:
             return f"{x:.1f}"
      # Trata apenas decimais comuns entre 0.01 e 0.1 (ex: 0.04450481 -> '0.044')
-        if 0.01 <= x < 0.1:
-            return f"{x:.3f}"
+        #if 0.01 <= x < 0.1:
+         #   return f"{x:.3f}"
           
         if 0.001 <= x < 0.1 and not str(x).endswith(('-01', '-02')):
             return f"{x:.3f}"
