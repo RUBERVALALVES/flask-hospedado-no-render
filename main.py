@@ -57,7 +57,15 @@ def getPrediction(filename):
 
 
     # Opção A: Pegando exatamente os 4 primeiros caracteres do número em notação científica
-    apenas_digitos = f"{probabilities:.8e}".split("e")[0][:4]
+    # Correto: itera sobre cada elemento ('x') de 'probabilities'
+
+    # 1. Extrai '9.99' para cada probabilidade no array
+    apenas_digitos = [f"{x:.8e}".split("e")[0][:4] for x in probabilities]
+
+    # 2. Se você quiser apenas o primeiro valor (da classe prevista):
+    apensa_digitos2 = apenas_digitos[predicted_index] 
+    # ou simplesmente apenas_digitos[0]
+
 
    
     # Garante que pega exatamente a mantissa original '9.99' truncando os caracteres
