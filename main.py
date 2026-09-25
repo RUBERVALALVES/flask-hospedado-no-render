@@ -66,13 +66,24 @@ def getPrediction(filename):
     # Caso contrário, extrai os 3 primeiros caracteres da mantissa (ex: "9.9")
     # Se for menor que 1 (ex: 0.9004522), pega o formato decimal comum "0.9"
     # Se for 1 ou mais (ou notação com mantissa >= 1), pega os 3 primeiros caracteres da notação científica "9.9"
-    apenas_digitos = [
-    # Se já é um decimal que começa com zero (ex: 0.0445... -> "0.04", 0.9004... -> "0.90"),
-    # pega os 4 primeiros caracteres da representação decimal padrão:
-    f"{x:.8f}"[:4] if str(x).startswith("0.") or x < 0.1 else 
-    # Para notação científica (ex: 9.3858e-01 -> "9.3"):
-    f"{x:.8e}".split("e")[0][:3]
-    for x in probabilities]
+  
+    def formatar_probabilidade(x):
+    # Converte o número para notação científica padrão para analisar a mantissa e o expoente
+        partes = f"{x:.8e}".split("e")
+        mantissa = partes[0][:3]  # Pega os 3 primeiros dígitos significativos (ex: "9.9", "1.1", "0.4")
+        expoente = int(partes[1])  # Pega o valor do expoente (-1, -3, -8, etc)
+
+    # 1. Se for um decimal padrão entre 0.01 e 0.90 (como 0.0445 ou 0.9004) -> Retorna "0.04", "0.90"
+        if 0.01 <= x < 0.91:
+            return f"{x:.2f}"
+    
+    # 2. Se for um valor com notação científica expressiva (ex: 9.988e-01 -> "9.9", 1.146e-03 -> "1.1")
+        return mantissa
+
+    # Aplica a função em todo o array de probabilidades
+    apenas_digitos = [formatar_probabilidade(x) for x in probabilities]
+
+  
     #apenas_digitos = [f"{x:.8e}".split("e")[0][:4] for x in probabilities]
     #apenas_digitos2 = ["0" if float(x) < 1 else x for x in apenas_digitos]
 
