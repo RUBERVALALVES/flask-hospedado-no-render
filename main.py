@@ -48,13 +48,21 @@ def getPrediction(filename):
     # Aplica Softmax caso a saída sejam logits (opcional, mas recomendado)
     exp_preds = np.exp(output_data - np.max(output_data))
     probabilities = exp_preds / np.sum(exp_preds)
-    prob = exp_preds
+  
     predicted_index = int(np.argmax(probabilities))
     confidence = float(probabilities[predicted_index]*100)
 
     print(f"Predições/Probabilidades: {probabilities}") # Para você depurar no terminal
     print(f"Classe detectada: {classes[predicted_index]} com confiança {confidence:.2f}")
 
+
+    # Opção A: Pegando exatamente os 4 primeiros caracteres do número em notação científica
+    apenas_digitos = [f"{x:.6e}".split("e")[0][:4] for x in probabilities]
+    # Saída: ['9.99', '1.23', '8.76']
+
+    # Opção B: Convertendo para float formatado com 2 casas decimais
+    apenas_digitos2 = [f"{x:.2f}" for x in probabilities]
+  
     apenas_digitos = [f"{x:.2e}".split('e')[0] for x in probabilities]
     #apenas_digitos1 = apenas_digitos[0]
     soma = sum(float(x) for x in apenas_digitos)  
@@ -69,9 +77,9 @@ def getPrediction(filename):
     #max_entropy = np.log(len(classes))  # Maior incerteza possível
     confianca =  f"{confidence:.2f}%"
     if confidence < 85.0 or normalized_entropy > 0.50:
-        return "Tipo de Imagem Invalida ou pouca confiança", confianca, probabilities, apenas_digitos, prob
+        return "Tipo de Imagem Invalida ou pouca confiança", confianca, probabilities, apenas_digitos, apenas_digitos2
 
-    return classes[predicted_index], confianca, probabilities, apenas_digitos, prob
+    return classes[predicted_index], confianca, probabilities, apenas_digitos, apenas_digitos2
 
   
     #confianca =  f"{confidence:.2f}"
