@@ -65,14 +65,7 @@ def getPrediction(filename):
     # 2. Se você quiser apenas o primeiro valor (da classe prevista):
     apensa_digitos2 = apenas_digitos[predicted_index] 
     # ou simplesmente apenas_digitos[0]
-
-
-   
-    # Garante que pega exatamente a mantissa original '9.99' truncando os caracteres
-    apenas_digitos2 = [f"{probabilities:.8e}".split("e")[0][:4] for x in probabilities]
-  
-    #apenas_digitos1 = apenas_digitos[0]
-    #soma = sum(float(x) for x in apenas_digitos)  
+     
     # Calcula a entropia normalizada
     entropy = -np.sum(probabilities * np.log(probabilities + 1e-10))
     max_entropy = np.log(len(classes))
