@@ -57,7 +57,7 @@ def getPrediction(filename):
 
 
     # Opção A: Pegando exatamente os 4 primeiros caracteres do número em notação científica
-    apenas_digitos = f"{probalbiities:.8e}".split("e")[0][:4]
+    apenas_digitos = f"{probabilities:.8e}".split("e")[0][:4]
 
    
     # Garante que pega exatamente a mantissa original '9.99' truncando os caracteres
