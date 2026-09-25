@@ -48,7 +48,7 @@ def getPrediction(filename):
     # Aplica Softmax caso a saída sejam logits (opcional, mas recomendado)
     exp_preds = np.exp(output_data - np.max(output_data))
     probabilities = exp_preds / np.sum(exp_preds)
-
+    prob = exp_preds
     predicted_index = int(np.argmax(probabilities))
     confidence = float(probabilities[predicted_index]*100)
 
@@ -69,9 +69,9 @@ def getPrediction(filename):
     #max_entropy = np.log(len(classes))  # Maior incerteza possível
     confianca =  f"{confidence:.2f}%"
     if confidence < 85.0 or normalized_entropy > 0.50:
-        return "Tipo de Imagem Invalida ou pouca confiança", confianca, probabilities, apenas_digitos
+        return "Tipo de Imagem Invalida ou pouca confiança", confianca, probabilities, apenas_digitos, prob
 
-    return classes[predicted_index], confianca, probabilities, apenas_digitos
+    return classes[predicted_index], confianca, probabilities, apenas_digitos, prob
 
   
     #confianca =  f"{confidence:.2f}"
