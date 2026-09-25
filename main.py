@@ -64,8 +64,7 @@ def getPrediction(filename):
 
     # Se for um valor decimal comum menor que 0.1 (ex: 0.0445), retorna "0.0"
     # Caso contrário, extrai os 3 primeiros caracteres da mantissa (ex: "9.9")
-    apenas_digitos = ["0.0" if x < 0.1 else f"{x:.8e}".split("e")[0][:3] 
-    for x in probabilities]
+    apenas_digitos = [f"{x:.8e}".split("e")[0][:3] if x >= 0.1 else "0.0" for x in probabilities]
     #apenas_digitos = [f"{x:.8e}".split("e")[0][:4] for x in probabilities]
     #apenas_digitos2 = ["0" if float(x) < 1 else x for x in apenas_digitos]
 
