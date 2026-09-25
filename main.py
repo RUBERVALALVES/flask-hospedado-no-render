@@ -61,14 +61,16 @@ def getPrediction(filename):
 
     # 1. Extrai '9.99' para cada probabilidade no array
     # Retorna "0" se o número for menor que 1; caso contrário, extrai a mantissa
-    apenas_digitos = ["0" if x < 1 else f"{x:.8e}".split("e")[0][:4] for x in probabilities]
-    apenas_digitos2 = ["0" if x < 1 else f"{x:.8e}".split("e")[0][:4] for x in probabilities]
-  
+
+    # Se for um valor decimal comum menor que 0.1 (ex: 0.0445), retorna "0.0"
+    # Caso contrário, extrai os 3 primeiros caracteres da mantissa (ex: "9.9")
+    apenas_digitos = ["0.0" if x < 0.1 else f"{x:.8e}".split("e")[0][:3] 
+    for x in probabilities]
     #apenas_digitos = [f"{x:.8e}".split("e")[0][:4] for x in probabilities]
     #apenas_digitos2 = ["0" if float(x) < 1 else x for x in apenas_digitos]
 
     # 2. Se você quiser apenas o primeiro valor (da classe prevista):
-    #penas_digitos2 = apenas_digitos[predicted_index] 
+    apenas_digitos2 = apenas_digitos[predicted_index] 
     # ou simplesmente apenas_digitos[0]
      
     # Calcula a entropia normalizada
