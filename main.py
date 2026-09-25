@@ -67,7 +67,10 @@ def getPrediction(filename):
     # Se for menor que 1 (ex: 0.9004522), pega o formato decimal comum "0.9"
     # Se for 1 ou mais (ou notação com mantissa >= 1), pega os 3 primeiros caracteres da notação científica "9.9"
     apenas_digitos = [
-    f"{x:.8e}".split("e")[0][:3] if "e" in str(x) else str(x)[:3]
+    # Se for um decimal padrão como 0.9004522 -> pega os 3 primeiros caracteres ("0.9")
+    f"{x:.2f}"[:3] if 0.1 <= x < 0.95 else 
+    # Para todos os outros (notações científicas como 9.988e-01, 1.146e-03) -> extrai a mantissa ("9.9", "1.1")
+    f"{x:.8e}".split("e")[0][:3]
     for x in probabilities]
     #apenas_digitos = [f"{x:.8e}".split("e")[0][:4] for x in probabilities]
     #apenas_digitos2 = ["0" if float(x) < 1 else x for x in apenas_digitos]
