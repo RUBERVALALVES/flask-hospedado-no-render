@@ -57,14 +57,14 @@ def getPrediction(filename):
 
 
     # Opção A: Pegando exatamente os 4 primeiros caracteres do número em notação científica
-    apenas_digitos = f"{x:.8e}".split("e")[0][:4]
+    apenas_digitos = f"{probalities:.8e}".split("e")[0][:4]
 
    
     # Garante que pega exatamente a mantissa original '9.99' truncando os caracteres
-    apenas_digitos2 = [f"{x:.8e}".split("e")[0][:4] for x in probabilities]
+    apenas_digitos2 = [f"{probalities:.8e}".split("e")[0][:4] for x in probabilities]
   
     #apenas_digitos1 = apenas_digitos[0]
-    soma = sum(float(x) for x in apenas_digitos)  
+    #soma = sum(float(x) for x in apenas_digitos)  
     # Calcula a entropia normalizada
     entropy = -np.sum(probabilities * np.log(probabilities + 1e-10))
     max_entropy = np.log(len(classes))
