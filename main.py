@@ -29,7 +29,7 @@ def getPrediction(filename):
                 class_name = r.names[top1_index]
                 
                 # Opcional: Definir uma regra de validação mínima (ex: se confiança menor que 50%, retornar "Invalid")
-                if top1_conf < 0.40:
+                if top1_conf < 0.70:
                     return "Invalid"
                     
                 return class_name
