@@ -32,7 +32,7 @@ def getPrediction(filename):
                 if top1_conf < 0.70:
                     return "Invalid"
                     
-                return class_name
+                return class_name, top1_conf
                 
             # Se for YOLO Object Detection (retorna caixas delimitadoras/bounding boxes)
             elif hasattr(r, 'boxes') and r.boxes is not None and len(r.boxes) > 0:
